@@ -2,7 +2,6 @@ package edu.axboot.domain.education;
 
 import com.chequer.axboot.core.parameter.RequestParams;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryResults;
 import edu.axboot.domain.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class EducationTeachService extends BaseService<EducationTeach, Long> {

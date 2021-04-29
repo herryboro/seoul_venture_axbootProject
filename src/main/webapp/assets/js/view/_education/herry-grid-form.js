@@ -1,27 +1,11 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        // console.log(fnObj.type);
-        // console.log(act);
-        // console.log(data);
-        // console.log(caller.searchView.getData());
-        var paramObj = $.extend({}, caller.searchView.getData(), data, { pageSize: 2 });
-        // console.log(paramObj);
-
-        var url;
-        if (caller.searchView.isPage.is(':checked')) {
-            url = '/api/v1/education/teachGrid/pages';
-        } else {
-            url = '/api/v1/education/teachGrid';
-        }
-
-        // paramObj.type = fnObj.type || '';
         axboot.ajax({
             type: 'GET',
-            url: url,
-            data: paramObj,
+            url: '/api/v1/education/teachGrid',
+            data: caller.searchView.getData(),
             callback: function (res) {
-                console.log(res);
                 caller.gridView01.setData(res);
             },
             options: {
@@ -31,9 +15,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 },
             },
         });
+
+        return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        var saveList = [].concat(caller.gridView01.getData());
+        var saveList = [].concat(caller.gridView01.getData('modified'));
         saveList = saveList.concat(caller.gridView01.getData('deleted'));
 
         axboot.ajax({
@@ -78,9 +64,6 @@ fnObj.pageResize = function () {};
 fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
         axboot.buttonClick(this, 'data-page-btn', {
-            searchPage: function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            },
             search: function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
@@ -100,41 +83,13 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document['searchView0']);
         this.target.attr('onsubmit', 'return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);');
-        this.target.on('keydown.search', 'input, .form-control', function (e) {
-            if (e.keyCode === 13) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            }
-        });
-
-        this.companyNm = $('.js-companyNm');
-        this.ceo = $('.js-ceo');
-        this.bizno = $('.js-bizno');
-        this.useYn = $('.js-useYn');
-        this.useYnAx5 = $('.js-useYn-ax5select').ax5select({
-            columnKeys: {
-                optionValue: 'value',
-                optionText: 'text',
-            },
-            options: [
-                { value: '', text: '전체' },
-                { value: 'Y', text: '사용' },
-                { value: 'N', text: '미사용' },
-            ],
-        });
-        this.useYnTag = $('.js-useYn-tag');
-        this.isPage = $('.js-isPage');
+        this.filter = $('#filter');
     },
     getData: function () {
         return {
-            pageType: this.pageType,
-            pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 0,
-            companyNm: this.companyNm.val(),
-            ceo: this.ceo.val(),
-            bizno: this.bizno.val(),
-            useYn: this.useYn.val(),
-            useYnAx5: ($('.js-useYn-ax5select').ax5select('getValue')[0] || {}).value,
-            useYnTag: this.useYnTag.val(),
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize,
+            filter: this.filter.val(),
         };
     },
 });
@@ -147,20 +102,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
 
         this.target = axboot.gridBuilder({
-            onPageChange: function (pageNumber) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, { pageNumber: pageNumber });
-            },
             showRowSelector: true,
             frozenColumnIndex: 0,
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                { key: 'companyNm', label: COL('company.name'), width: 250, align: 'left', editor: 'text' },
-                { key: 'ceo', label: COL('company.ceo'), width: 100, align: 'center', editor: 'text' },
-                { key: 'bizno', label: COL('company.bizno'), width: 100, align: 'center', editor: 'text' },
-                { key: 'tel', label: COL('company.tel'), width: 100, align: 'center', editor: 'text' },
-                { key: 'email', label: COL('company.email'), width: 100, align: 'center', editor: 'text' },
-                { key: 'useYn', label: COL('use.or.not'), align: 'center', editor: 'text' },
+                { key: 'companyNm', label: 'KEY', width: 160, align: 'left', editor: 'text' },
+                { key: 'ceo', label: 'VALUE', width: 350, align: 'left', editor: 'text' },
+                { key: 'bizno', label: 'ETC1', width: 100, align: 'center', editor: 'text' },
+                { key: 'tel', label: 'ETC2', width: 100, align: 'center', editor: 'text' },
+                { key: 'email', label: 'ETC3', width: 100, align: 'center', editor: 'text' },
+                { key: 'useYn', label: 'ETC4', width: 100, align: 'center', editor: 'text' },
             ],
             body: {
                 onClick: function () {
@@ -184,9 +136,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         if (_type == 'modified' || _type == 'deleted') {
             list = ax5.util.filter(_list, function () {
-                //                delete this.deleted;
-                //                return this.key;
-                return this.id;
+                delete this.deleted;
+                return this.key;
             });
         } else {
             list = _list;
@@ -194,6 +145,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         return list;
     },
     addRow: function () {
-        this.target.addRow({ __created__: true, useYn: 'Y' }, 'last');
+        this.target.addRow({ __created__: true }, 'last');
     },
 });
