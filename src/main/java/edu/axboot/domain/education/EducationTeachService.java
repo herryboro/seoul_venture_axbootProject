@@ -3,6 +3,8 @@ package edu.axboot.domain.education;
 import com.chequer.axboot.core.parameter.RequestParams;
 import com.querydsl.core.BooleanBuilder;
 import edu.axboot.domain.BaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Service
 public class EducationTeachService extends BaseService<EducationTeach, Long> {
+    private static final Logger logger = LoggerFactory.getLogger(EducationTeachService.class);
     private EducationTeachRepository educationTeachRepository;
 
     @Inject
@@ -71,6 +74,10 @@ public class EducationTeachService extends BaseService<EducationTeach, Long> {
         String ceo = requestParams.getString("ceo", "");
         String bizno = requestParams.getString("bizno", "");
         String useYn = requestParams.getString("useYn", "");
+        logger.info("companyNm: " + companyNm);
+        logger.info("ceo: " + ceo);
+        logger.info("bizno: " + bizno);
+        logger.info("useYn: " + useYn);
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -182,4 +189,5 @@ public class EducationTeachService extends BaseService<EducationTeach, Long> {
         Page<EducationTeach> pages = new PageImpl<>(list.subList(start, end), pageable, list.size());
         return pages;
     }
+
 }
