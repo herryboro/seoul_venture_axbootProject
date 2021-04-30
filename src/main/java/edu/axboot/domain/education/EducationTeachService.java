@@ -183,10 +183,16 @@ public class EducationTeachService extends BaseService<EducationTeach, Long> {
 
     public Page<EducationTeach> getPage(RequestParams<EducationTeach> requestParams) {
         List<EducationTeach> list = this.getList(requestParams);
+
         Pageable pageable = requestParams.getPageable();
+        logger.info("pageable getOffSet(): " + pageable.getOffset());
+        logger.info("pageable.getPageSize(): " + pageable.getPageSize());
+        logger.info("list.size(): " + list.size());
+
         int start = (int)pageable.getOffset();
         int end = (start + pageable.getPageSize() > list.size() ? list.size() : (start + pageable.getPageSize()));
         Page<EducationTeach> pages = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
         return pages;
     }
 

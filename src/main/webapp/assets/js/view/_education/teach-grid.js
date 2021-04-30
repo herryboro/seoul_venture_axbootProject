@@ -3,9 +3,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         // console.log(fnObj.type);
         // console.log(act);
-        // console.log(data);
+        console.log(data);
         // console.log(caller.searchView.getData());
-        var paramObj = $.extend({}, caller.searchView.getData(), data, { pageSize: 2 });
+        var paramObj = $.extend({}, caller.searchView.getData(), data, { pageSize: 10 });
         // console.log(paramObj);
 
         var url;
@@ -118,17 +118,17 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         this.ceo = $('.js-ceo');
         this.bizno = $('.js-bizno');
         this.useYn = $('.js-useYn');
-        this.useYnAx5 = $('.js-useYn-ax5select').ax5select({
-            columnKeys: {
-                optionValue: 'value',
-                optionText: 'text',
-            },
-            options: [
-                { value: '', text: '전체' },
-                { value: 'Y', text: '사용' },
-                { value: 'N', text: '미사용' },
-            ],
-        });
+        // this.useYnAx5 = $('.js-useYn-ax5select').ax5select({
+        //     columnKeys: {
+        //         optionValue: 'value',
+        //         optionText: 'text',
+        //     },
+        //     options: [
+        //         { value: '', text: '전체' },
+        //         { value: 'Y', text: '사용' },
+        //         { value: 'N', text: '미사용' },
+        //     ],
+        // });
         this.useYnTag = $('.js-useYn-tag');
         this.isPage = $('.js-isPage');
     },
@@ -141,8 +141,8 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             ceo: this.ceo.val(),
             bizno: this.bizno.val(),
             useYn: this.useYn.val(),
-            useYnAx5: ($('.js-useYn-ax5select').ax5select('getValue')[0] || {}).value,
-            useYnTag: this.useYnTag.val(),
+            // useYnAx5: ($('.js-useYn-ax5select').ax5select('getValue')[0] || {}).value,
+            useYnTag: this.useYnTag.val()
         };
     },
 });
