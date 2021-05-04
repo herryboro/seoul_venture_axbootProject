@@ -3,12 +3,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         // console.log(fnObj.type);
         // console.log(act);
-        console.log(data);
+        // console.log(data);
         // console.log(caller.searchView.getData());
-        var paramObj = $.extend({}, caller.searchView.getData(), data, { pageSize: 10 });
-        // console.log(paramObj);
-
+        var paramObj = $.extend({}, caller.searchView.getData(), data, { pageSize: 5 });
         var url;
+
         if (caller.searchView.isPage.is(':checked')) {
             url = '/api/v1/education/teachGrid/pages';
         } else {
@@ -118,6 +117,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         this.ceo = $('.js-ceo');
         this.bizno = $('.js-bizno');
         this.useYn = $('.js-useYn');
+        this.isPage = $('.js-isPage');
         // this.useYnAx5 = $('.js-useYn-ax5select').ax5select({
         //     columnKeys: {
         //         optionValue: 'value',
@@ -129,8 +129,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         //         { value: 'N', text: '미사용' },
         //     ],
         // });
-        this.useYnTag = $('.js-useYn-tag');
-        this.isPage = $('.js-isPage');
+        // this.useYnTag = $('.js-useYn-tag');   
     },
     getData: function () {
         return {
@@ -139,10 +138,10 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             pageSize: this.pageSize || 0,
             companyNm: this.companyNm.val(),
             ceo: this.ceo.val(),
-            bizno: this.bizno.val(),
-            useYn: this.useYn.val(),
+            bizno: this.bizno.val()
+            // useYn: this.useYn.val(),
             // useYnAx5: ($('.js-useYn-ax5select').ax5select('getValue')[0] || {}).value,
-            useYnTag: this.useYnTag.val()
+            // useYnTag: this.useYnTag.val()
         };
     },
 });

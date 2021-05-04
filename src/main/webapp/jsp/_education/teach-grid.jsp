@@ -41,12 +41,12 @@
                                 <option value="N">미사용</option>
                             </select>
                         </ax:td>
-                        <ax:td label='select(ax5ui 사용)' width="200px">
+                        <!-- <ax:td label='select(ax5ui 사용)' width="200px">
                             <div data-ax5select class="js-useYn-ax5select"></div>
                         </ax:td>
                         <ax:td label='select(tag 사용)' width="200px">
                             <ax:common-code groupCd="USE_YN" clazz="js-useYn-tag" emptyText="전체" />
-                        </ax:td>
+                        </ax:td> -->
                     </ax:tr>
                 </ax:tbl>
             </ax:form>

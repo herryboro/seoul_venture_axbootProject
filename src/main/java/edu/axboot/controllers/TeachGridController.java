@@ -54,6 +54,7 @@ public class TeachGridController extends BaseController {
     @RequestMapping(value = "/pages", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public Responses.PageResponse pages(RequestParams<EducationTeach> requestParams) {
         Page<EducationTeach> pages = educationTeachService.getPage(requestParams);
+
         return Responses.PageResponse.of(pages);
     }
 

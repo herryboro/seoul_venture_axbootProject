@@ -6,6 +6,9 @@ import com.chequer.axboot.core.controllers.BaseController;
 import com.chequer.axboot.core.parameter.RequestParams;
 import edu.axboot.domain.education.EducationTeach;
 import edu.axboot.domain.education.EducationTeachService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/api/v1/education/teachGridForm")
 public class TeachGridFormController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(TeachGridFormController.class);
 
     @Inject
     private EducationTeachService educationTeachService;
@@ -35,6 +39,12 @@ public class TeachGridFormController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
+    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public Responses.PageResponse pageList(RequestParams<EducationTeach> requestParams) {
+        Page<EducationTeach> page = educationTeachService.getPage(requestParams);
+        return Responses.PageResponse.of(page);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public EducationTeach view(@PathVariable Long id) {
         EducationTeach entity = educationTeachService.getOneUsingQueryDsl(id);
@@ -48,6 +58,8 @@ public class TeachGridFormController extends BaseController {
         return ok();
     }
 
+
+//    @DeleteMapping("/{id}")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     public ApiResponse remove(@PathVariable Long id) {
         educationTeachService.deleteUsingQueryDsl(id);

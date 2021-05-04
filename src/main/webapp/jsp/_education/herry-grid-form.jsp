@@ -31,7 +31,7 @@
                             <input type="text" name="bizno" class="js-bizno form-control" />
                         </ax:td>
                         <ax:td label='페이징 사용' width="200px">
-                            <ax:common-code groupCd="USE_YN" clazz="js-useYn-tag" emptyText="전체" />
+                            <input type="checkbox" class="js-isPage" />
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>
@@ -48,21 +48,23 @@
                             <h2><i class="cqc-list"></i>
                                 프로그램 목록 </h2>
                         </div>
-                        <div class="right">
-                            <button type="button" class="btn btn-default" data-grid-view-01-btn="add"><i class="cqc-circle-with-plus"></i> 추가</button>
-                            <button type="button" class="btn btn-default" data-grid-view-01-btn="delete"><i class="cqc-circle-with-plus"></i> 삭제</button>
-                        </div>
                     </div>
-                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;">
+                    
+                    </div>
                 </div>
                 <div class="col-md-8">
+                    <div class="right">
+                        <button type="button" class="btn btn-default" data-grid-view-01-btn="add"><i class="cqc-circle-with-plus"></i> 추가</button>
+                        <!-- <button type="button" class="btn btn-default" data-grid-view-01-btn="delete"><i class="cqc-circle-with-plus"></i> 삭제</button> -->
+                    </div>
                     <form name="form" class="js-form">
                         <div data-ax-tbl class="ax-form-tbl">
                             <div data-ax-tr>
                                 <div data-ax-td style="width:50%">
                                     <div data-ax-td-label style="width:150px">ID</div>
                                     <div data-ax-td-wrap>                                  
-                                        <input type="text" data-ax-path="id" class="form-control" value="" readonly="readonly">                                                            
+                                        <input type="text" data-ax-path="id" class="js-id form-control" value="" readonly="readonly">                                                            
                                     </div>
                                 </div>
                                 <div data-ax-td style="width:50%">

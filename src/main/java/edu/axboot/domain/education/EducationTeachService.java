@@ -3,6 +3,7 @@ package edu.axboot.domain.education;
 import com.chequer.axboot.core.parameter.RequestParams;
 import com.querydsl.core.BooleanBuilder;
 import edu.axboot.domain.BaseService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,21 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class EducationTeachService extends BaseService<EducationTeach, Long> {
     private static final Logger logger = LoggerFactory.getLogger(EducationTeachService.class);
+
     private EducationTeachRepository educationTeachRepository;
 
-    @Inject
-    private EducationTeachMapper educationTeachMapper;
+//    @Inject
+//    private EducationTeachMapper educationTeachMapper;
 
     @Inject
     public EducationTeachService(EducationTeachRepository educationTeachRepository) {
         super(educationTeachRepository);
-        this.educationTeachRepository = this.educationTeachRepository;
+        this.educationTeachRepository = educationTeachRepository;
     }
 
     // JPA
@@ -142,40 +143,40 @@ public class EducationTeachService extends BaseService<EducationTeach, Long> {
     }
 
     // MyBatis
-    public List<EducationTeach> getListUsingMyBatis(RequestParams<EducationTeach> requestParams) {
-        String companyNm = requestParams.getString("companyNm", "");
-        String ceo = requestParams.getString("ceo", "");
-        String bizno = requestParams.getString("bizno", "");
-        String useYn = requestParams.getString("useYn", "");
-
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("companyNm", companyNm);
-        params.put("ceo", ceo);
-        params.put("bizno", bizno);
-        params.put("useYn", useYn);
-
-        List<EducationTeach> list = educationTeachMapper.selectList(params);
-
-        return list;
-    }
-
-    public EducationTeach getOneUsingMyBatis(Long id) {
-        return educationTeachMapper.selectOne(id);
-    }
-
-    public void saveUsingMyBatis(EducationTeach entity) {
-        if (entity.getId() == null || entity.getId() == 0) {
-            educationTeachMapper.insert(entity);
-        } else if (entity.isModified()) {
-            educationTeachMapper.update(entity);
-        } else if (entity.isDeleted()) {
-            educationTeachMapper.delete(entity.getId());
-        }
-    }
-
-    public void deleteUsingMybatis(Long id) {
-        educationTeachMapper.delete(id);
-    }
+//    public List<EducationTeach> getListUsingMyBatis(RequestParams<EducationTeach> requestParams) {
+//        String companyNm = requestParams.getString("companyNm", "");
+//        String ceo = requestParams.getString("ceo", "");
+//        String bizno = requestParams.getString("bizno", "");
+//        String useYn = requestParams.getString("useYn", "");
+//
+//        HashMap<String, Object> params = new HashMap<String, Object>();
+//        params.put("companyNm", companyNm);
+//        params.put("ceo", ceo);
+//        params.put("bizno", bizno);
+//        params.put("useYn", useYn);
+//
+//        List<EducationTeach> list = educationTeachMapper.selectList(params);
+//
+//        return list;
+//    }
+//
+//    public EducationTeach getOneUsingMyBatis(Long id) {
+//        return educationTeachMapper.selectOne(id);
+//    }
+//
+//    public void saveUsingMyBatis(EducationTeach entity) {
+//        if (entity.getId() == null || entity.getId() == 0) {
+//            educationTeachMapper.insert(entity);
+//        } else if (entity.isModified()) {
+//            educationTeachMapper.update(entity);
+//        } else if (entity.isDeleted()) {
+//            educationTeachMapper.delete(entity.getId());
+//        }
+//    }
+//
+//    public void deleteUsingMybatis(Long id) {
+//        educationTeachMapper.delete(id);
+//    }
 
     public List<EducationTeach> getList(RequestParams<EducationTeach> requestParams) {
         return getListUsingQueryDsl(requestParams);
@@ -188,9 +189,11 @@ public class EducationTeachService extends BaseService<EducationTeach, Long> {
         logger.info("pageable getOffSet(): " + pageable.getOffset());
         logger.info("pageable.getPageSize(): " + pageable.getPageSize());
         logger.info("list.size(): " + list.size());
+        logger.info("pageNumber: " + pageable.getPageNumber());
 
         int start = (int)pageable.getOffset();
         int end = (start + pageable.getPageSize() > list.size() ? list.size() : (start + pageable.getPageSize()));
+        logger.info("end: " + end);
         Page<EducationTeach> pages = new PageImpl<>(list.subList(start, end), pageable, list.size());
 
         return pages;
