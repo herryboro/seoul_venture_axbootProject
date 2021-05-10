@@ -1,7 +1,6 @@
 package edu.axboot.domain.education.book;
 
 import edu.axboot.AXBootApplication;
-import edu.axboot.controllers.TeachGridBookController;
 import edu.axboot.controllers.dto.EducationResponseDto;
 import edu.axboot.controllers.dto.EducationSaveRequestDto;
 import edu.axboot.controllers.dto.EducationUpdateRequestDto;
