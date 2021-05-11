@@ -122,12 +122,105 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "roomNum", label: "객실번호", width: 160, align: "center", editor: "text"},
-                {key: "roomTypCd", label: "객실타입", width: 160, align: "center", editor: "text"},
-                {key: "dndYn", label: "DND 여부", width: 160, align: "center", editor: "text"},
+                {
+                    key: "roomTypCd", 
+                    label: "객실타입", 
+                    width: 160, 
+                    align: "center", 
+                    editor: {
+                        type:'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'useYn',
+                                optionText: 'text'
+                            },
+                            options: [
+                                {useYn: 'SB', text: 'SB'},
+                                {useYn: 'DB', text: 'DB'},
+                                {useYn: 'DT', text: 'DT'}
+                            ]
+                        }
+                    }
+                },
+                {   
+                    key: "dndYn", 
+                    label: "DND 여부", 
+                    width: 160, 
+                    align: "center", 
+                    editor: {
+                        type:'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'useYn',
+                                optionText: 'text'
+                            },
+                            options: [
+                                {useYn: 'Y', text: '사용'},
+                                {useYn: 'N', text: '사용 안함'}
+                            ]
+                        }
+                    }
+                },
                 {key: "ebYn", label: "ExBed 여부", width: 160, align: "center", editor: "text"},
-                {key: "roomSttusCd", label: "객실 상태", width: 160, align: "center", editor: "text"},
-                {key: "clnSttusCd", label: "청소 상태", width: 160, align: "center", editor: "text"},
-                {key: "updatedBy", label: "서비스 상태", width: 160, align: "center", editor: "text"}
+                {
+                    key: "roomSttusCd", 
+                    label: "객실 상태", 
+                    width: 160, 
+                    align: "center", 
+                    editor: {
+                        type:'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'useYn',
+                                optionText: 'text'
+                            },
+                            options: [
+                                {useYn: '공실', text: '공실'},
+                                {useYn: '재실', text: '재실'},
+                                {useYn: '외출', text: '외출'}
+                            ]
+                        }
+                    }
+                },
+                {
+                    key: "clnSttusCd", 
+                    label: "청소 상태", 
+                    width: 160, 
+                    align: "center", 
+                    editor: {
+                        type:'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'useYn',
+                                optionText: 'text'
+                            },
+                            options: [
+                                {useYn: '청소 대기', text: '청소 대기'},
+                                {useYn: '청소중', text: '청소중'},
+                                {useYn: '청소 완료', text: '청소 완료'}
+                            ]
+                        }
+                    }
+                },
+                {
+                    key: "svcSttusCd", 
+                    label: "서비스 상태", 
+                    width: 160, 
+                    align: "center", 
+                    editor: {
+                        type:'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'useYn',
+                                optionText: 'text'
+                            },
+                            options: [
+                                {useYn: 'O.O.O', text: 'Out Of Order'},
+                                {useYn: 'O.O.S', text: 'Out Of Service'}
+                            ]
+                        }
+                    }
+                }
             ],
             body: {
                 onClick: function () {

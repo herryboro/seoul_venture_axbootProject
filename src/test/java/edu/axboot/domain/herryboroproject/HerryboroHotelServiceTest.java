@@ -46,8 +46,8 @@ public class HerryboroHotelServiceTest {
 
         HerryboroHotelDto hotelDto = new HerryboroHotelDto();
 
-        HerryboroHotelDto build = HerryboroHotelDto.builder()
-                .roomNum("505")
+        HerryboroHotelDto build = hotelDto.builder()
+                .roomNum("504")
                 .roomTypCd("SB")
                 .dndYn("Y")
                 .ebYn("Y")
