@@ -51,7 +51,8 @@ public class HerryboroHotel extends BaseJpaModel<Long> {
 	}
 
 	@Builder
-	public HerryboroHotel(Long id, String roomNum, String roomTypCd, String dndYn, String ebYn, String roomSttusCd, String clnSttusCd, String svcSttusCd) {
+	public HerryboroHotel(Long id, String roomNum, String roomTypCd, String dndYn, String ebYn, String roomSttusCd, String clnSttusCd, String svcSttusCd,
+						  boolean isCreated, boolean isModified, boolean isDeleted) {
 		this.id = id;
 		this.roomNum = roomNum;
 		this.roomTypCd = roomTypCd;
@@ -60,5 +61,8 @@ public class HerryboroHotel extends BaseJpaModel<Long> {
 		this.roomSttusCd = roomSttusCd;
 		this.clnSttusCd = clnSttusCd;
 		this.svcSttusCd = svcSttusCd;
+		this.__created__ = isCreated;
+		this.__modified__ = isModified;
+		this.__deleted__ = isDeleted;
 	}
 }

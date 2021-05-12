@@ -38,6 +38,9 @@ public class ReservRegisterDto {
     private String advnYn;
     private BigDecimal salePrc;
     private BigDecimal svcPrc;
+    private boolean __created__;
+    private boolean __modified__;
+    private boolean __deleted__;
 
     @Builder
     public ReservRegisterDto(
@@ -45,7 +48,7 @@ public class ReservRegisterDto {
             String guestNmEng, String guestTel, String email, String langCd, String arrDt, String arrTime,
             String depDt, String depTime, Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt,
             Integer chldCnt, String saleTypCd, String sttusCd, String srcCd, String brth, String gender, String payCd,
-            String advnYn, BigDecimal salePrc, BigDecimal svcPrc) {
+            String advnYn, BigDecimal salePrc, BigDecimal svcPrc,boolean __created__, boolean __modified__,boolean __deleted__) {
 
         this.rsvDt = rsvDt;
         this.sno = sno;
@@ -74,6 +77,9 @@ public class ReservRegisterDto {
         this.advnYn = advnYn;
         this.salePrc = salePrc;
         this.svcPrc = svcPrc;
+        this.__created__ = __created__;
+        this.__modified__ = __modified__;
+        this.__deleted__ = __deleted__;
     }
 
     public ReservRegister toEntity() {

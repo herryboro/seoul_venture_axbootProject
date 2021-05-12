@@ -3,6 +3,7 @@ package edu.axboot.domain.reservRegister;
 import edu.axboot.domain.BaseJpaModel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @DynamicInsert
 @DynamicUpdate
 @Entity
+@NoArgsConstructor
 @Table(name = "PMS_CHK")
 public class ReservRegister extends BaseJpaModel<Long> {
 

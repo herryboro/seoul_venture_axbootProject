@@ -24,6 +24,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var saveList = [].concat(caller.gridView01.getData());
         saveList = saveList.concat(caller.gridView01.getData('deleted'));
 
+        console.log(saveList);
+
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/herryboroHotel",
@@ -123,23 +125,23 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             columns: [
                 {key: "roomNum", label: "객실번호", width: 160, align: "center", editor: "text"},
                 {
-                    key: "roomTypCd", 
-                    label: "객실타입", 
-                    width: 160, 
-                    align: "center", 
+                    key: 'roomTypCd',
+                    label: '객실타입',
+                    width: 100,
+                    align: 'center',
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['ROOM_TYPE'].map[this.value];
+                    },
                     editor: {
-                        type:'select',
+                        type: 'select',
                         config: {
                             columnKeys: {
-                                optionValue: 'useYn',
-                                optionText: 'text'
+                                optionValue: 'code',
+                                optionText: 'name',
                             },
-                            options: [
-                                {useYn: 'SB', text: 'SB'},
-                                {useYn: 'DB', text: 'DB'},
-                                {useYn: 'DT', text: 'DT'}
-                            ]
-                        }
+                            options: parent.COMMON_CODE['ROOM_TYPE'],
+                        },
                     }
                 },
                 {   
@@ -147,39 +149,59 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     label: "DND 여부", 
                     width: 160, 
                     align: "center", 
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['DND_YN'].map[this.value];
+                    },
                     editor: {
-                        type:'select',
+                        type: 'select',
                         config: {
                             columnKeys: {
-                                optionValue: 'useYn',
-                                optionText: 'text'
+                                optionValue: 'code',
+                                optionText: 'name',
                             },
-                            options: [
-                                {useYn: 'Y', text: '사용'},
-                                {useYn: 'N', text: '사용 안함'}
-                            ]
-                        }
+                            options: parent.COMMON_CODE['DND_YN'],
+                        },
                     }
                 },
-                {key: "ebYn", label: "ExBed 여부", width: 160, align: "center", editor: "text"},
+                {
+                    key: "ebYn", 
+                    label: "ExBed 여부", 
+                    width: 160, 
+                    align: "center", 
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['EXBED_YN'].map[this.value];
+                    },
+                    editor: {
+                        type: 'select',
+                        config: {
+                            columnKeys: {
+                                optionValue: 'code',
+                                optionText: 'name',
+                            },
+                            options: parent.COMMON_CODE['EXBED_YN'],
+                        },
+                    }
+                },
                 {
                     key: "roomSttusCd", 
                     label: "객실 상태", 
                     width: 160, 
                     align: "center", 
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['ROOM_STS'].map[this.value];
+                    },
                     editor: {
-                        type:'select',
+                        type: 'select',
                         config: {
                             columnKeys: {
-                                optionValue: 'useYn',
-                                optionText: 'text'
+                                optionValue: 'code',
+                                optionText: 'name',
                             },
-                            options: [
-                                {useYn: '공실', text: '공실'},
-                                {useYn: '재실', text: '재실'},
-                                {useYn: '외출', text: '외출'}
-                            ]
-                        }
+                            options: parent.COMMON_CODE['ROOM_STS'],
+                        },
                     }
                 },
                 {
@@ -187,19 +209,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     label: "청소 상태", 
                     width: 160, 
                     align: "center", 
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['ROOM_CLEAN'].map[this.value];
+                    },
                     editor: {
-                        type:'select',
+                        type: 'select',
                         config: {
                             columnKeys: {
-                                optionValue: 'useYn',
-                                optionText: 'text'
+                                optionValue: 'code',
+                                optionText: 'name',
                             },
-                            options: [
-                                {useYn: '청소 대기', text: '청소 대기'},
-                                {useYn: '청소중', text: '청소중'},
-                                {useYn: '청소 완료', text: '청소 완료'}
-                            ]
-                        }
+                            options: parent.COMMON_CODE['ROOM_CLEAN'],
+                        },
                     }
                 },
                 {
@@ -207,18 +229,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     label: "서비스 상태", 
                     width: 160, 
                     align: "center", 
+                    formatter: function () {
+                        if (!this.value) return '';
+                        return parent.COMMON_CODE['ROOM_SERVICE'].map[this.value];
+                    },
                     editor: {
-                        type:'select',
+                        type: 'select',
                         config: {
                             columnKeys: {
-                                optionValue: 'useYn',
-                                optionText: 'text'
+                                optionValue: 'code',
+                                optionText: 'name',
                             },
-                            options: [
-                                {useYn: 'O.O.O', text: 'Out Of Order'},
-                                {useYn: 'O.O.S', text: 'Out Of Service'}
-                            ]
-                        }
+                            options: parent.COMMON_CODE['ROOM_SERVICE'],
+                        },
                     }
                 }
             ],

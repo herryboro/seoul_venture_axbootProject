@@ -47,10 +47,13 @@ public class HerryboroHotelServiceTest {
         HerryboroHotelDto hotelDto = new HerryboroHotelDto();
 
         HerryboroHotelDto build = hotelDto.builder()
-                .roomNum("504")
+                .roomNum("3021")
                 .roomTypCd("SB")
                 .dndYn("Y")
                 .ebYn("Y")
+                .__created__(true)
+                .__modified__(false)
+                .__deleted__(false)
                 .build();
 
         HerryboroHotel herryboroHotel = build.toEntitiy();

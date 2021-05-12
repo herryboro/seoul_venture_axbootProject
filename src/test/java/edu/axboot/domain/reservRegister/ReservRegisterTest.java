@@ -22,6 +22,11 @@ public class ReservRegisterTest {
     private ReservRegisterService reservRegisterService;
 
     @Test
+    public void 시작화면() {
+
+    }
+
+    @Test
     public void 예약등록() {
         ReservRegisterDto reservRegisterDto = new ReservRegisterDto();
 
