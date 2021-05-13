@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Setter
 @Getter
@@ -112,15 +115,28 @@ public class ReservRegister extends BaseJpaModel<Long> {
     }
 
     @Builder
-	public ReservRegister(String rsvDt, Integer sno, String rsvNum, Long guestId, String guestNm, String guestNmEng,
+	public ReservRegister(Long guestId, String guestNm, String guestNmEng,
 						  String guestTel, String email, String langCd, String arrDt, String arrTime, String depDt, String depTime,
 						  Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt, Integer chldCnt, String saleTypCd,
 						  String sttusCd, String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc,
 						  BigDecimal svcPrc) {
 
-		this.rsvDt = rsvDt;
-		this.sno = sno;
-		this.rsvNum = rsvNum;
+		// 예약 일자
+		LocalDate date = LocalDate.now(); //오늘 날짜 LocalDate 객체 생성
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String today = date.format(dateTimeFormatter); //LocalDate 객체를 String 객체로 바꿈
+
+		// 일렬번호 생성
+		int serialNum = (int) (Math.random() * 100000);
+
+		// 예약 번호
+		int reservNum = 1;
+		String convertNum = String.valueOf(reservNum++);
+		reservNum = Integer.parseInt(convertNum);
+
+		this.rsvDt = today;
+		this.sno = serialNum;
+		this.rsvNum = convertNum;
 		this.guestId = guestId;
 		this.guestNm = guestNm;
 		this.guestNmEng = guestNmEng;

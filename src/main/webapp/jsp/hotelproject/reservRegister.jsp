@@ -53,11 +53,7 @@
                                     <div data-ax-td style="width:30%">
                                         <div data-ax-td-label style="width:120px;">객실 타입</div>
                                         <div data-ax-td-wrap>
-                                            <select name="roomTypCd" data-ax-path="roomTypCd" class="form-control">
-                                                <option value="SB">SB</option>
-                                                <option value="DB">DB</option>
-                                                <option value="DT">DT</option>
-                                            </select>
+                                            <ax:common-code groupCd="PMS_ROOM_TYPE" clazz="js-pay-method" emptyText="전체" />
                                         </div>
                                     </div>
                                     <div data-ax-td style="width:30%">
@@ -109,7 +105,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">이메일</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="email" data-ax-path="email" class="form-control" />
+                                                        <input type="text" name="email" data-ax-path="email" class="form-control" data-ax-validate="required"/>
                                                     </div>
                                                 </div>         
                                             </div>
@@ -118,10 +114,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">언어</div>
                                                     <div data-ax-td-wrap>
-                                                        <select name="langCd" data-ax-path="langCd" class="form-control">
-                                                            <option value="korean">한국어</option>
-                                                            <option value="english">영어</option>
-                                                        </select>
+                                                        <ax:common-code groupCd="PMS_LANG" clazz="js-pay-method" emptyText="전체" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">
@@ -154,27 +147,13 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">판매유형</div>
                                                     <div data-ax-td-wrap>
-                                                        <select name="saleTypCd" data-ax-path="saleTypCd" class="form-control">
-                                                            <option value="reserve">부킹 예약</option>
-                                                            <option value="workIn">워크인</option>
-                                                            <option value="roomOnHire">대실</option>
-                                                            <option value="comp">컴프</option>
-                                                            <option value="houseUse">하우스 유즈</option>
-                                                        </select>
+                                                        <ax:common-code groupCd="PMS_SALE_TYPE" clazz="js-pay-method" emptyText="전체" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">
-                                                    <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">예약경로</div>
+                                                    <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">예약경로</div>   <!-- 테이블 어떤 컬럼인지? -->
                                                     <div data-ax-td-wrap>
-                                                        <select name="sttusCd" data-ax-path="sttusCd" class="form-control">
-                                                            <option value="korean">홈페이지</option>
-                                                            <option value="english">메일</option>
-                                                            <option value="english">전화</option>
-                                                            <option value="english">팩스</option>
-                                                            <option value="english">방문</option>
-                                                            <option value="english">온라인</option>
-                                                            <option value="english">기타</option>
-                                                        </select>
+                                                        <ax:common-code groupCd="PMS_RESERVATION_ROUTE" clazz="js-pay-method" emptyText="전체" />
                                                     </div>
                                                 </div>         
                                             </div>
@@ -183,12 +162,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">결제방법</div>
                                                     <div data-ax-td-wrap>
-                                                        <select name="payCd" data-ax-path="payCd" class="form-control">
-                                                            <option value="korean">현금</option>
-                                                            <option value="english">신용카드</option>
-                                                            <option value="english">계좌이체</option>
-                                                            <option value="english">대외후불</option>                            
-                                                        </select>
+                                                        <ax:common-code groupCd="PMS_PAY_METHOD" clazz="js-pay-method" emptyText="전체" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">

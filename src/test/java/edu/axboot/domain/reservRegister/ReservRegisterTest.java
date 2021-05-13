@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -22,18 +24,10 @@ public class ReservRegisterTest {
     private ReservRegisterService reservRegisterService;
 
     @Test
-    public void 시작화면() {
-
-    }
-
-    @Test
     public void 예약등록() {
         ReservRegisterDto reservRegisterDto = new ReservRegisterDto();
 
         ReservRegisterDto build = reservRegisterDto.builder()
-                .rsvDt("2021-05-11")
-                .sno(11111)
-                .rsvNum("65151")
                 .arrDt("2021-05-12")
                 .depDt("2021-05-14")
                 .nightCnt(2)

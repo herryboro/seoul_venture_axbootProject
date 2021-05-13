@@ -33,9 +33,14 @@ public class ReservRegisterController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
+//    @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
+//    public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
+//        reservRegisterService.saveRegister(reservRegisterDto);
+//        return ok();
+//    }
+
     @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
-        logger.info("getBrth ===================> " + reservRegisterDto.getBrth());
         reservRegisterService.save(reservRegisterDto.toEntity());
         return ok();
     }

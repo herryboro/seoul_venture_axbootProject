@@ -1,25 +1,5 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // PAGE_SEARCH: function (caller, act, data) {
-    //     console.log(caller.formView01.getData());
-    //     axboot.ajax({
-    //         type: "POST",
-    //         url: '/api/v1/reservRegister/list/',
-    //         data: JSON.stringify(caller.formView01.getData()),
-    //         callback: function (res) {
-    //             console.log(res);
-    //             caller.formView01.setData(res);
-    //         },
-    //         options: {
-    //             // axboot.ajax 함수에 2번째 인자는 필수가 아닙니다. ajax의 옵션을 전달하고자 할때 사용합니다.
-    //             onError: function (err) {
-    //                 console.log(err);
-    //             }
-    //         }
-    //     });
-
-    //     return false;
-    // },
     PAGE_SAVE: function (caller, act, data) {
         var sendObj = caller.formView01.getData();
         console.log(sendObj);
@@ -34,8 +14,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    ITEM_CLICK: function (caller, act, data) {
+    MODAL_OPEN: function (caller, act, data) {
 
+        axboot.modal.open({
+            width: 780,
+            height: 450,
+            iframe: {
+                param: 'id=' + (data.id || ''),
+                url: 'searchClientModal.jsp',
+            },
+            header: { title: '협력사 등록' },
+            callback: function (data) {
+                console.log(data);
+                if (data && data.dirty) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
+                this.close();
+            },
+        });
     },
     ITEM_ADD: function (caller, act, data) {
         caller.gridView01.addRow();
@@ -77,7 +73,6 @@ fnObj.pageButtonView = axboot.viewExtend({
         });
     }
 });
-
 
 /**
  * searchView
@@ -122,7 +117,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "key", label: "작성일", width: 500, align: "left", editor: "text"},
-                {key: "value", label: "메모", width: 1013, align: "left", editor: "text"}
+                {key: "value", label: "메모", width: 1012, align: "left", editor: "text"}
             ],
             body: {
                 onClick: function () {
@@ -137,6 +132,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             },
             "delete": function () {
                 ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+            },
+            "create": function () {
+                ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
             }
         });
     },
@@ -178,39 +176,31 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model.setModel(data);
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     },
-    // validate: function () {
-    //     var item = this.model.get();
+    validate: function () {
+        var item = this.model.get();
 
-    //     var rs = this.model.validate();
-    //     if (rs.error) {
-    //         axDialog.alert(LANG('ax.script.form.validate', rs.error[0].jquery.attr('title')), function () {
-    //             rs.error[0].jquery.focus();
-    //         });
-    //         return false;
-    //     }
+        var rs = this.model.validate();
+        if (rs.error) {
+            axDialog.alert(LANG('ax.script.form.validate', rs.error[0].jquery.attr('title')), function () {
+                rs.error[0].jquery.focus();
+            });
+            return false;
+        }
 
-    //     // required 이외 벨리데이션 정의
-    //     var pattern;
-    //     if (item.email) {
-    //         pattern = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.(?:[A-Za-z0-9]{2,}?)$/i;
-    //         if (!pattern.test(item.email)) {
-    //             axDialog.alert('이메일 형식을 확인하세요.', function () {
-    //                 $('[data-ax-path="email"]').focus();
-    //             });
-    //             return false;
-    //         }
-    //     }
+        // required 이외 벨리데이션 정의
+        var pattern;
+        if (item.email) {
+            pattern = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.(?:[A-Za-z0-9]{2,}?)$/i;
+            if (!pattern.test(item.email)) {
+                axDialog.alert('이메일 형식을 확인하세요.', function () {
+                    $('[data-ax-path="email"]').focus();
+                });
+                return false;
+            }
+        }
 
-    //     if (item.bizno && !(pattern = /^([0-9]{3})\-?([0-9]{2})\-?([0-9]{5})$/).test(item.bizno)) {
-    //         axDialog.alert('사업자번호 형식을 확인하세요.'),
-    //             function () {
-    //                 $('[data-ax-path="bizno"]').focus();
-    //             };
-    //         return false;
-    //     }
-
-    //     return true;
-    // },
+        return true;
+    },
     
     initView: function () {
         var _this = this; // fnObj.formView01
@@ -221,8 +211,12 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
 
-        this.model.onChange("nightCnt", function (e) {
-            
+        // 날짜 계산 코드들
+        this.model.onChange("nightCnt", function (e) {         
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+            var nightCnt = $('.js-nightCnt').val();
+    
             var getFormatDate = function(checkDate, nightCnt) {
                 var date = new Date(checkDate);
                 date.setDate(date.getDate() + nightCnt);
@@ -236,17 +230,45 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
 
                 return year + '-' + month + '-' + day;
             }
-
-            var nightCnt = $('.js-nightCnt').val();
-            var getArrDt = getFormatDate($('.js-arrDt').val(), parseInt(nightCnt)); 
-
-            $('.js-depDt').val(getArrDt);
-
-            // var date = new Date('2021-05-02');
-            // date.setDate(date.getDate() + 2);
-            // console.log(date.getDate());
             
+            var nightCnt = $('.js-nightCnt').val();
+            var getArrDt = getFormatDate(arrDt, parseInt(nightCnt));     // 숙박수 숫자 변환 필수.. 에러 1시간 못잡음..
+            $('.js-depDt').val(getArrDt);         
         });
+
+        this.model.onChange("depDt", function (e) {    
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+
+            if(!arrDt) {
+                console.log(arrDt);   
+                $('.js-nightCnt').val(0);
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+
+                var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3);
+            }
+        });
+
+        this.model.onChange("arrDt", function (e) {    
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+
+            if(!depDt) {
+                console.log(arrDt);   
+                $('.js-nightCnt').val(0);
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+
+                var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3);
+            }
+        });        
         
+        // 모달 버튼
+
     },
 });

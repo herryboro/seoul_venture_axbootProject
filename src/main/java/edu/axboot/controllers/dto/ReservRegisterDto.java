@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
@@ -50,6 +52,7 @@ public class ReservRegisterDto {
             Integer chldCnt, String saleTypCd, String sttusCd, String srcCd, String brth, String gender, String payCd,
             String advnYn, BigDecimal salePrc, BigDecimal svcPrc,boolean __created__, boolean __modified__,boolean __deleted__) {
 
+
         this.rsvDt = rsvDt;
         this.sno = sno;
         this.rsvNum = rsvNum;
@@ -82,11 +85,11 @@ public class ReservRegisterDto {
         this.__deleted__ = __deleted__;
     }
 
+
+
+
     public ReservRegister toEntity() {
         return ReservRegister.builder()
-                .rsvDt(rsvDt)
-                .sno(sno)
-                .rsvNum(rsvNum)
                 .guestId(guestId)
                 .guestNm(guestNm)
                 .guestNmEng(guestNmEng)

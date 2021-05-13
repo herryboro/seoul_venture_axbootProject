@@ -4,6 +4,8 @@ import edu.axboot.controllers.dto.ReservRegisterDto;
 import org.springframework.stereotype.Service;
 import edu.axboot.domain.BaseService;
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -19,4 +21,9 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
     public List<ReservRegister> gets(ReservRegister requestParams) {
         return findAll();
     }
+
+//    public void saveRegister(ReservRegisterDto reservRegisterDto) {
+//        ReservRegister reservRegister = reservRegisterDto.toEntity();
+//        System.out.println("getRsvDt ====================> " + reservRegister.getRsvDt());
+//    }
 }
