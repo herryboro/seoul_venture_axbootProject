@@ -1,18 +1,21 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
-        var sendObj = caller.formView01.getData();
-        console.log(sendObj);
+        if(caller.formView01.validate()) {
+            var sendObj = $.extend({}, caller.formView01.getData(), caller.gridView01.getData());
+            console.log(sendObj);
 
-        axboot.ajax({
-            type: "POST",
-            url: '/api/v1/reservRegister',
-            data: JSON.stringify(sendObj),
-            callback: function (res) {
-                // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                axToast.push("저장 되었습니다");
-            }
-        });
+            axboot.ajax({
+                type: "POST",
+                url: '/api/v1/reservRegister',
+                data: JSON.stringify(sendObj),
+                callback: function (res) {
+                    console.log(res);
+                    axToast.push("저장 되었습니다");
+                    $(".res_nm").html(res.message);
+                }
+            });
+        }       
     },
     MODAL_OPEN: function (caller, act, data) {
 
@@ -56,7 +59,6 @@ fnObj.pageStart = function () {
     this.gridView01.initView();
     this.formView01.initView();
     this.searchView.initView();
-
     // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
@@ -64,9 +66,6 @@ fnObj.pageStart = function () {
 fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
         axboot.buttonClick(this, "data-page-btn", {
-            "search": function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            },
             "save": function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
             }
@@ -116,8 +115,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             multipleSelect: false,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "key", label: "작성일", width: 500, align: "left", editor: "text"},
-                {key: "value", label: "메모", width: 1012, align: "left", editor: "text"}
+                {
+                    key: "memoDtti", 
+                    label: "작성일", 
+                    width: 500, 
+                    align: "center", 
+                    editor: {
+                        type: "date", config: {}
+                    }
+                },
+                {key: "memoCn", label: "메모", width: 1012, align: "center", editor: "text"}
             ],
             body: {
                 onClick: function () {
@@ -166,7 +173,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         return { useYn: 'Y' };
     },
     getData: function () {
-        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        var data = this.modelFormatter.getClearData(this.model.get()); 
         return $.extend({}, data);
     },
     setData: function (data) {
@@ -180,12 +187,12 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         var item = this.model.get();
 
         var rs = this.model.validate();
-        if (rs.error) {
-            axDialog.alert(LANG('ax.script.form.validate', rs.error[0].jquery.attr('title')), function () {
-                rs.error[0].jquery.focus();
-            });
-            return false;
-        }
+        // if (rs.error) {
+        //     axDialog.alert(LANG('ax.script.form.validate', rs.error[0].jquery.attr('title')), function () {
+        //         rs.error[0].jquery.focus();
+        //     });
+        //     return false;
+        // }
 
         // required 이외 벨리데이션 정의
         var pattern;
@@ -206,15 +213,13 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         var _this = this; // fnObj.formView01
 
         _this.target = $('.js-form');
-
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
 
         // 날짜 계산 코드들
         this.model.onChange("nightCnt", function (e) {         
-            var arrDt = $('.js-arrDt').val();
-            var depDt = $('.js-depDt').val();    
+            var arrDt = $('.js-arrDt').val(); 
             var nightCnt = $('.js-nightCnt').val();
     
             var getFormatDate = function(checkDate, nightCnt) {
@@ -247,24 +252,37 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                 var date1 = new Date(depDt);
                 var date2 = new Date(arrDt);
 
-                var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
-                $('.js-nightCnt').val(date3);
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3).trigger('onChange');
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
             }
         });
 
         this.model.onChange("arrDt", function (e) {    
             var arrDt = $('.js-arrDt').val();
             var depDt = $('.js-depDt').val();    
-
+            
             if(!depDt) {
-                console.log(arrDt);   
-                $('.js-nightCnt').val(0);
+                $('.js-nightCnt').val(0).trigger('onChange');
             } else {        
                 var date1 = new Date(depDt);
                 var date2 = new Date(arrDt);
-
-                var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
-                $('.js-nightCnt').val(date3);
+                
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3).trigger('onChange');
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
             }
         });        
         

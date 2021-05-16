@@ -27,9 +27,9 @@ public class CustomerInfoController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
-    @RequestMapping(method = {RequestMethod.PUT}, produces = APPLICATION_JSON)
-    public ApiResponse save(@RequestBody List<CustomerInfo> request) {
-        customerInfoService.save(request);
-        return ok();
-    }
+//    @RequestMapping(method = {RequestMethod.PUT}, produces = APPLICATION_JSON)
+//    public ApiResponse save(@RequestBody List<CustomerInfo> request) {
+//        customerInfoService.save(request);
+//        return ok();
+//    }
 }

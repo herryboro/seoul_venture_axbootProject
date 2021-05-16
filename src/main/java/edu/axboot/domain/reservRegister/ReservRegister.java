@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -109,6 +110,12 @@ public class ReservRegister extends BaseJpaModel<Long> {
 	@Column(name = "SVC_PRC", precision = 18, scale = 0)
 	private BigDecimal svcPrc;
 
+	@Transient
+	private static int last_num; // 일렬번호
+
+	@Transient
+	private int serialNum;
+
     @Override
     public Long getId() {
         return id;
@@ -118,8 +125,9 @@ public class ReservRegister extends BaseJpaModel<Long> {
 	public ReservRegister(Long guestId, String guestNm, String guestNmEng,
 						  String guestTel, String email, String langCd, String arrDt, String arrTime, String depDt, String depTime,
 						  Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt, Integer chldCnt, String saleTypCd,
-						  String sttusCd, String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc,
+						  String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc,
 						  BigDecimal svcPrc) {
+
 
 		// 예약 일자
 		LocalDate date = LocalDate.now(); //오늘 날짜 LocalDate 객체 생성
@@ -127,12 +135,21 @@ public class ReservRegister extends BaseJpaModel<Long> {
 		String today = date.format(dateTimeFormatter); //LocalDate 객체를 String 객체로 바꿈
 
 		// 일렬번호 생성
-		int serialNum = (int) (Math.random() * 100000);
+		if(last_num == 0) {
+			last_num = 100;
+			this.serialNum = last_num;
+			this.last_num = this.serialNum;
+		} else {
+			this.last_num++;
+			this.serialNum = this.last_num;
+			this.last_num = this.serialNum;
+		}
 
 		// 예약 번호
-		int reservNum = 1;
-		String convertNum = String.valueOf(reservNum++);
-		reservNum = Integer.parseInt(convertNum);
+		String convertNum = "R" + StringUtils.rightPad(today.replace("-", ""), 12, String.valueOf(serialNum));
+
+		// 상태(STTUS_CD)
+		String sttus = "RSV_01";
 
 		this.rsvDt = today;
 		this.sno = serialNum;
@@ -153,7 +170,7 @@ public class ReservRegister extends BaseJpaModel<Long> {
 		this.adultCnt = adultCnt;
 		this.chldCnt = chldCnt;
 		this.saleTypCd = saleTypCd;
-		this.sttusCd = sttusCd;
+		this.sttusCd = sttus;
 		this.srcCd = srcCd;
 		this.brth = brth;
 		this.gender = gender;

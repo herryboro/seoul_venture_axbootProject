@@ -3,12 +3,15 @@ package edu.axboot.domain.customerinfo;
 import com.chequer.axboot.core.annotations.ColumnPosition;
 import edu.axboot.domain.SimpleJpaModel;
 import lombok.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.chequer.axboot.core.annotations.Comment;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Setter
 @Getter
@@ -50,9 +53,35 @@ public class CustomerInfo extends SimpleJpaModel<Long> {
 	@Comment(value = "삭제 여부")
 	private String delYn;
 
+	@Transient
+	private static int last_num; // 일렬번호
+
+	@Transient
+	private int serialNum;
 
     @Override
     public Long getId() {
         return id;
     }
+
+    @Builder
+	public CustomerInfo(String rsvNum, String memoCn, Timestamp memoDtti, String delYn) {
+
+		// 일렬번호 생성
+		if(last_num == 0) {
+			last_num = 100;
+			this.sno = last_num;
+		} else {
+			this.sno = this.last_num++;
+		}
+
+		// memoMan
+		String memoMan = "작성자";
+
+		this.rsvNum = rsvNum;
+		this.memoCn = memoCn;
+		this.memoDtti = memoDtti;
+		this.memoMan = memoMan;
+		this.delYn = delYn;
+	}
 }

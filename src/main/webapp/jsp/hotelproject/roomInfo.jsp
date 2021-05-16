@@ -20,12 +20,7 @@
                 <ax:tbl clazz="ax-search-tbl" minWidth="500px">
                     <ax:tr>
                         <ax:td label='객실 타입' width="300px">
-                            <select data-ax-path="room_type" class="js-roomTyp">
-                                <option value="">전체</option>
-                                <option value="SB">SB</option>
-                                <option value="DB">DB</option>
-                                <option value="DT">DT</option>
-                            </select>
+                            <ax:common-code groupCd="PMS_ROOM_TYPE" clazz="js-roomTyp" emptyText="전체" />
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>

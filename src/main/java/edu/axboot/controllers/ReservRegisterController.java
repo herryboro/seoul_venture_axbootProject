@@ -3,7 +3,10 @@ package edu.axboot.controllers;
 import com.chequer.axboot.core.api.response.Responses;
 import com.chequer.axboot.core.controllers.BaseController;
 import com.chequer.axboot.core.parameter.RequestParams;
+import edu.axboot.controllers.dto.CustomerInfoDto;
 import edu.axboot.controllers.dto.ReservRegisterDto;
+import edu.axboot.domain.customerinfo.CustomerInfo;
+import edu.axboot.domain.customerinfo.CustomerInfoService;
 import edu.axboot.domain.education.EducationTeachService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +29,15 @@ public class ReservRegisterController extends BaseController {
     @Inject
     private ReservRegisterService reservRegisterService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = APPLICATION_JSON)
-    public Responses.ListResponse list(@RequestBody ReservRegisterDto reservRegisterDto) {
+    @Inject
+    private CustomerInfoService customerInfoService;
 
-        List<ReservRegister> list = reservRegisterService.gets(reservRegisterDto.toEntity());
-        return Responses.ListResponse.of(list);
-    }
+//    @RequestMapping(method = RequestMethod.GET, produces = APPLICATION_JSON)
+//    public Responses.ListResponse list(@RequestBody ReservRegisterDto reservRegisterDto) {
+//        List<ReservRegister> list = reservRegisterService.gets(reservRegisterDto.toEntity());
+//
+//        return Responses.ListResponse.of(list);
+//    }
 
 //    @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
 //    public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
@@ -41,7 +47,22 @@ public class ReservRegisterController extends BaseController {
 
     @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
-        reservRegisterService.save(reservRegisterDto.toEntity());
-        return ok();
+        ReservRegister save = reservRegisterService.save(reservRegisterDto.toEntityOfReservRegister());
+
+        String rsvNum = save.getRsvNum();
+
+        if(reservRegisterDto.getCustomerInfoDtos() != null) {
+            for (int i = 0; i < reservRegisterDto.getCustomerInfoDtos().size(); i++) {
+                CustomerInfo build = CustomerInfo.builder()
+                        .rsvNum(rsvNum)
+                        .memoCn(reservRegisterDto.getCustomerInfoDtos().get(i).getMemoCn())
+                        .memoDtti(reservRegisterDto.getCustomerInfoDtos().get(i).getMemoDtti())
+                        .build();
+
+                customerInfoService.save(build);
+            }
+        }
+
+        return ok(rsvNum);
     }
 }

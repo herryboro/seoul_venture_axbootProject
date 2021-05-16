@@ -2,6 +2,7 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         var paramObj = $.extend(caller.searchView.getData(), data);
+        console.log(paramObj);
 
         axboot.ajax({
             type: "GET",
@@ -94,6 +95,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["searchView0"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
+        console.log(this);
         this.roomTypCd = $('.js-roomTyp');
 
     },

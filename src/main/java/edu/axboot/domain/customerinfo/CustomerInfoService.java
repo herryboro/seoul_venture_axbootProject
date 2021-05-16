@@ -1,5 +1,7 @@
 package edu.axboot.domain.customerinfo;
 
+import com.querydsl.core.BooleanBuilder;
+import edu.axboot.controllers.dto.CustomerInfoDto;
 import org.springframework.stereotype.Service;
 import edu.axboot.domain.BaseService;
 import javax.inject.Inject;
