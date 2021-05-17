@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/v1/hotelcustomer")
+@RequestMapping(value = "/api/v1/hotelCustomer")
 public class HotelCustomerController extends BaseController {
 
     @Inject

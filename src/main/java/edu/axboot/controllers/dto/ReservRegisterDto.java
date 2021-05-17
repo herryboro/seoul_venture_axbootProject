@@ -1,13 +1,11 @@
 package edu.axboot.controllers.dto;
 
-import edu.axboot.domain.customerinfo.CustomerInfo;
 import edu.axboot.domain.reservRegister.ReservRegister;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -41,12 +39,10 @@ public class ReservRegisterDto {
     private String advnYn;
     private BigDecimal salePrc;
     private BigDecimal svcPrc;
+    private List<CustomerInfoDto> memoList;
     private boolean __created__;
     private boolean __modified__;
     private boolean __deleted__;
-
-    // 메모 관련
-    private List<CustomerInfoDto> customerInfoDtos;
 
     @Builder
     public ReservRegisterDto(
@@ -54,7 +50,7 @@ public class ReservRegisterDto {
             String guestNmEng, String guestTel, String email, String langCd, String arrDt, String arrTime,
             String depDt, String depTime, Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt,
             Integer chldCnt, String saleTypCd, String sttusCd, String srcCd, String brth, String gender, String payCd,
-            String advnYn, BigDecimal salePrc, BigDecimal svcPrc, List<CustomerInfoDto> customerInfoDtos, boolean __created__, boolean __modified__,boolean __deleted__) {
+            String advnYn, BigDecimal salePrc, BigDecimal svcPrc, List<CustomerInfoDto> memoList, boolean __created__, boolean __modified__,boolean __deleted__) {
 
 
         this.rsvDt = rsvDt;
@@ -84,7 +80,7 @@ public class ReservRegisterDto {
         this.advnYn = advnYn;
         this.salePrc = salePrc;
         this.svcPrc = svcPrc;
-        this.customerInfoDtos = customerInfoDtos;
+        this.memoList = memoList;
         this.__created__ = __created__;
         this.__modified__ = __modified__;
         this.__deleted__ = __deleted__;
@@ -117,20 +113,4 @@ public class ReservRegisterDto {
                 .svcPrc(svcPrc)
                 .build();
     }
-
-//    public CustomerInfo toEntityOfCustomerInfo() {
-//        CustomerInfo build = null;
-//
-//        for(int i = 0; i < customerInfoDtos.size(); i++) {
-//            String memoCn = customerInfoDtos.get(i).getMemoCn();
-//            Timestamp memoDtti = customerInfoDtos.get(i).getMemoDtti();
-//
-//            build = CustomerInfo.builder()
-//                    .memoCn(memoCn)
-//                    .memoDtti(memoDtti)
-//                    .build();
-//        }
-//
-//        return build;
-//    }
 }

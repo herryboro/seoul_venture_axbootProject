@@ -90,7 +90,7 @@
                                     <div data-ax-td style="width:100%">
                                         <div data-ax-td-label style="width:120px;">
                                             <div data-ax-td style="width:100%">투숙객</div> 
-                                            <button type="button" class="btn btn-default" data-grid-view-01-btn="add">
+                                            <button type="button" class="btn btn-default" data-grid-view-01-btn="create">
                                                 <i class="cqc-circle-with-plus"></i> <ax:lang id="ax.admin.search"/>
                                             </button>
                                         </div>

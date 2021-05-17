@@ -2,7 +2,7 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         if(caller.formView01.validate()) {
-            var sendObj = $.extend({}, caller.formView01.getData(), caller.gridView01.getData());
+            var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
             console.log(sendObj);
 
             axboot.ajax({
@@ -18,22 +18,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }       
     },
     MODAL_OPEN: function (caller, act, data) {
+        if(!data) {
+            data = {};
+        }
 
         axboot.modal.open({
-            width: 780,
-            height: 450,
+            width: 750,
+            height: 400,
             iframe: {
                 param: 'id=' + (data.id || ''),
                 url: 'searchClientModal.jsp',
             },
-            header: { title: '협력사 등록' },
-            callback: function (data) {
+            header: {tilte: '협력사 등록'},
+            callback: function(data) {
                 console.log(data);
-                if (data && data.dirty) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                }
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 this.close();
-            },
+            }
         });
     },
     ITEM_ADD: function (caller, act, data) {
@@ -141,7 +142,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.ITEM_DEL);
             },
             "create": function () {
-                ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
+                ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
             }
         });
     },
