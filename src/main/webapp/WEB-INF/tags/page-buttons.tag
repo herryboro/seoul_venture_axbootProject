@@ -10,9 +10,10 @@
     <div class="button-warp">
         
         <!-- https://chequer-io.github.io/chequer-icon/demo.html -->
-    
-        <button type="button" class="btn btn-info" data-page-btn="reload" onclick="window.location.reload();"><i class="cqc-save"></i> 신규등록</button>
-        
+
+      
+        <!-- <button type="button" class="btn btn-info" data-page-btn="reload" onclick="window.location.reload();"><i class="cqc-save"></i> 신규등록</button> -->
+   
         <c:if test="${authGroupMenu.schAh eq 'Y'}">
             <button type="button" class="btn btn-info" data-page-btn="search"><i class="cqc-magnifier"></i> <%=MessageUtils.getMessage(request, "ax.admin.inquery")%> </button>
         </c:if>

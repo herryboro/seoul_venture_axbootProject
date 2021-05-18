@@ -31,25 +31,25 @@
     <jsp:body>
         <ax:split-layout name="ax1" orientation="vertical">
             <ax:split-panel width="*" style="padding-right: 0px;" scroll="scroll">
-              <form name="form" class="js-form" onsubmit="return false;">
-                <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 100px;"></div>
-                <div class="H5"></div>
-                <div data-ax-tbl class="ax-form-tbl">
-                    <div data-ax-tr>
-                        <div data-ax-td style="width:50%">
-                            <div data-ax-td-label style="width:120px;">이름</div>
-                            <div data-ax-td-wrap>
+                <form name="form" class="js-form" onsubmit="return false;">
+                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 100px;"></div>
+                    <div class="H5"></div>
+                    <div data-ax-tbl class="ax-form-tbl">
+                        <div data-ax-tr>
+                            <div data-ax-td style="width:50%">
+                                <div data-ax-td-label style="width:120px;">이름</div>
+                                <div data-ax-td-wrap>
+                                    <input type="text" name="id" data-ax-path="id" class="form-control" readonly="readonly">
+                                </div>
+                            </div>
+                            <div data-ax-td style="width:50%">
+                                <div data-ax-td-label style="width:120px;">영문</div>
+                                <div data-ax-td-wrap>
                                 <input type="text" name="id" data-ax-path="id" class="form-control" readonly="readonly">
+                                </div>
                             </div>
                         </div>
-                        <div data-ax-td style="width:50%">
-                            <div data-ax-td-label style="width:120px;">영문</div>
-                            <div data-ax-td-wrap>
-                              <input type="text" name="id" data-ax-path="id" class="form-control" readonly="readonly">
-                            </div>
-                        </div>
-                    </div>
-  
+
                     <div data-ax-tr>
                         <div data-ax-td style="width:50%">
                             <div data-ax-td-label style="width:120px;">연락처</div>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-  
+
                     <div data-ax-tr>
                         <div data-ax-td style="width:50%">
                             <div data-ax-td-label style="width:120px;">언어</div>
@@ -107,8 +107,7 @@
                     </div>
                   </div>
                 </div>
-              </form>
-              
+                </form>
             </ax:split-panel>
         </ax:split-layout>
 

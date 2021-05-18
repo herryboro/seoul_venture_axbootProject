@@ -10,7 +10,6 @@ import java.awt.print.Pageable;
 @Getter
 @NoArgsConstructor
 public class HerryboroHotelDto {
-    private Long id;
     private String roomNum;
     private String roomTypCd;
     private String dndYn;

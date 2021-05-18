@@ -1,12 +1,13 @@
 package edu.axboot.domain.hotelcustomer;
 
-import com.chequer.axboot.core.annotations.ColumnPosition;
-import edu.axboot.domain.SimpleJpaModel;
-import lombok.*;
-import org.apache.ibatis.type.Alias;
+import edu.axboot.domain.BaseJpaModel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import com.chequer.axboot.core.annotations.Comment;
+
 import javax.persistence.*;
 
 
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "PMS_GUEST")
-public class HotelCustomer extends SimpleJpaModel<Long> {
+public class HotelCustomer extends BaseJpaModel<Long> {
 
 	@Id
 	@Column(name = "ID", precision = 19, nullable = false)
@@ -52,4 +53,17 @@ public class HotelCustomer extends SimpleJpaModel<Long> {
     public Long getId() {
         return id;
     }
+
+    @Builder
+	public HotelCustomer(Long id, String guestNm, String guestNmEng, String guestTel, String email, String brth, String gender, String langCd, String rmk) {
+    	this.id = id;
+		this.guestNm = guestNm;
+		this.guestNmEng = guestNmEng;
+		this.guestTel = guestTel;
+		this.email = email;
+		this.brth = brth;
+		this.gender = gender;
+		this.langCd = langCd;
+		this.rmk = rmk;
+	}
 }

@@ -38,7 +38,6 @@ public class ReservRegisterController extends BaseController {
     @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
         ReservRegister reservRegister = reservRegisterService.saveReserveRegisgter(reservRegisterDto);
-
         customerInfoService.saveMemo(reservRegisterDto.getMemoList(), reservRegister.getRsvNum());
 
         return ok(reservRegister.getRsvNum());

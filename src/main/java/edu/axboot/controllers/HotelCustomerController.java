@@ -3,11 +3,10 @@ package edu.axboot.controllers;
 import com.chequer.axboot.core.api.response.Responses;
 import com.chequer.axboot.core.controllers.BaseController;
 import com.chequer.axboot.core.parameter.RequestParams;
+import edu.axboot.controllers.dto.HotelCustomerDto;
 import org.springframework.stereotype.Controller;
 import com.chequer.axboot.core.api.response.ApiResponse;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import edu.axboot.domain.hotelcustomer.HotelCustomer;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
 
@@ -22,14 +21,23 @@ public class HotelCustomerController extends BaseController {
     private HotelCustomerService hotelCustomerService;
 
     @RequestMapping(method = RequestMethod.GET, produces = APPLICATION_JSON)
-    public Responses.ListResponse list(RequestParams<HotelCustomer> requestParams) {
-        List<HotelCustomer> list = hotelCustomerService.gets(requestParams);
+    public Responses.ListResponse list(@RequestParam(value = "guestNm") String guestNm,
+                                       @RequestParam(value = "guestTel") String guestTel,
+                                       @RequestParam(value = "email") String email) {
+        List<HotelCustomer> list = hotelCustomerService.list(guestNm, guestTel, email);
+
         return Responses.ListResponse.of(list);
     }
 
-    @RequestMapping(method = {RequestMethod.PUT}, produces = APPLICATION_JSON)
-    public ApiResponse save(@RequestBody List<HotelCustomer> request) {
+    @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
+    public ApiResponse save(@RequestBody HotelCustomerDto request) {
         hotelCustomerService.save(request);
+
         return ok();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public HotelCustomerDto findGuest(@PathVariable long id) {
+        return hotelCustomerService.findGuest(id);
     }
 }

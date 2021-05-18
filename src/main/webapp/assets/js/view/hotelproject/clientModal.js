@@ -34,9 +34,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
       }
     });
   },
-  ITEM_ADD: function (caller, act, data) {
+  MODAL_EXIT: function (caller, act, data) {
     caller.gridView01.addRow();
-},
+  },
   dispatch: function (caller, act, data) {
     var result = ACTIONS.exec(caller, act, data);
     if (result != 'error') {

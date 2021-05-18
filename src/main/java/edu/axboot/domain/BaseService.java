@@ -6,6 +6,7 @@ import edu.axboot.domain.education.QEducationTeach;
 import edu.axboot.domain.education.book.QEducationBook;
 import edu.axboot.domain.file.QCommonFile;
 import edu.axboot.domain.herryboroproject.QHerryboroHotel;
+import edu.axboot.domain.hotelcustomer.QHotelCustomer;
 import edu.axboot.domain.program.QProgram;
 import edu.axboot.domain.program.menu.QMenu;
 import edu.axboot.domain.reservRegister.QReservRegister;
@@ -37,6 +38,7 @@ public class BaseService<T, ID extends Serializable> extends AXBootBaseService<T
     protected QHerryboroHotel qHerryboroHotel = QHerryboroHotel.herryboroHotel;
     protected QReservRegister qReservRegister = QReservRegister.reservRegister;
     protected QCustomerInfo qCustomerInfo = QCustomerInfo.customerInfo;
+    protected QHotelCustomer qHotelCustomer = QHotelCustomer.hotelCustomer;
 
     protected AXBootJPAQueryDSLRepository<T, ID> repository;
 
