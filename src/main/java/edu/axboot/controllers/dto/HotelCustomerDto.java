@@ -45,19 +45,6 @@ public class HotelCustomerDto {
                 .rmk(rmk)
                 .build();
     }
-//    public HotelCustomer reserveHotelCustomerEntity() {
-//        return HotelCustomer.builder()
-//                .id(id)
-//                .guestNm(guestNm)
-//                .guestNmEng(guestNmEng)
-//                .guestTel(guestTel)
-//                .email(email)
-//                .brth(brth)
-//                .gender(gender)
-//                .langCd(langCd)
-//                .rmk(rmk)
-//                .build();
-//    }
 
     public HotelCustomerDto(HotelCustomer hotelCustomer) {
         this.id = hotelCustomer.getId();

@@ -100,7 +100,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">이름</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="guestNm" data-ax-path="guestNm" class="form-control" />
+                                                        <input type="text" name="guestNm" data-ax-path="guestNm" class="js-guestNm form-control" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">
@@ -115,13 +115,13 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">연락처</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="guestTel" data-ax-path="guestTel" class="form-control" />
+                                                        <input type="text" name="guestTel" data-ax-path="guestTel" class="js-guestTel form-control" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">이메일</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="email" data-ax-path="email" class="form-control" data-ax-validate="required"/>
+                                                        <input type="text" name="email" data-ax-path="email" class="js-email form-control" data-ax-validate="required"/>
                                                     </div>
                                                 </div>         
                                             </div>
@@ -143,8 +143,8 @@
                                                                     <span class="input-group-addon"><i class="cqc-calendar"></i></span>
                                                                 </div>
                                                                 <div data-ax-td style="width:50%">
-                                                                    <input type="radio" id="male" name="gender" data-ax-path="gender" value="male"> 남
-                                                                    <input type="radio" id="female" name="gender" data-ax-path="gender" value="female"> 여
+                                                                    <input type="radio" id="male" name="gender" data-ax-path="gender" value="남"> 남
+                                                                    <input type="radio" id="female" name="gender" data-ax-path="gender" value="여"> 여
                                                                 </div>
                                                             </div>                                                                                                                                                  
                                                         </div>                                                       

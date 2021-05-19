@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ReservRegisterDto {
-
+    private Long id;
     private String rsvDt;
     private Integer sno;
     private String rsvNum;
@@ -46,13 +46,13 @@ public class ReservRegisterDto {
 
     @Builder
     public ReservRegisterDto(
-            String rsvDt, Integer sno, String rsvNum, Long guestId, String guestNm,
+            Long id, String rsvDt, Integer sno, String rsvNum, Long guestId, String guestNm,
             String guestNmEng, String guestTel, String email, String langCd, String arrDt, String arrTime,
             String depDt, String depTime, Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt,
             Integer chldCnt, String saleTypCd, String sttusCd, String srcCd, String brth, String gender, String payCd,
             String advnYn, BigDecimal salePrc, BigDecimal svcPrc, List<CustomerInfoDto> memoList, boolean __created__, boolean __modified__,boolean __deleted__) {
 
-
+        this.id = id;
         this.rsvDt = rsvDt;
         this.sno = sno;
         this.rsvNum = rsvNum;
@@ -88,6 +88,7 @@ public class ReservRegisterDto {
 
     public ReservRegister toEntityOfReservRegister() {
         return ReservRegister.builder()
+                .id(id)
                 .guestId(guestId)
                 .guestNm(guestNm)
                 .guestNmEng(guestNmEng)

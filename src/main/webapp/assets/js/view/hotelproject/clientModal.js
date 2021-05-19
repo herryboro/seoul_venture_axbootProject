@@ -1,25 +1,19 @@
 var modalParams = modalParams || {};
-console.log(modalParams);
-
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
   PAGE_SEARCH: function(caller, act, data) {
-    if(!modalParams.id) {
-      return false;
-    }
-
     axboot.ajax({
       type: 'GET',
       url: '/api/v1/hotelCustomer/',
+      data: modalParams,
       callback: function(res) {
-        caller.formView01.setData(res);
+        caller.gridView01.setData(res);
       }
     });
   },
   PAGE_SAVE: function(caller, act, data) {
     var formViewObj = caller.formView01.getData();
-    console.log(formViewObj);
 
     axboot.ajax({
       type: 'POST',
@@ -33,6 +27,29 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
       }
     });
+  },
+  ITEM_CLICK: function (caller, act, data) {
+    var id = data.id;
+
+    axboot.ajax({
+        type:'GET',
+        url: '/api/v1/hotelCustomer/' + id,
+        callback: function(res) {
+            caller.formView01.setData(res);
+        }
+    });
+  },
+  SEND_DATA: function(caller, act, data) {
+    var data = caller.formView01.getData();
+    console.log(data);
+
+    axboot.ajax({
+      type: 'GET',
+      url: '/api/v1/hotelCustomer/' + data.id,
+      callback: function (res) {
+          parent.axboot.modal.callback(res);
+      }
+  });
   },
   MODAL_EXIT: function (caller, act, data) {
     caller.gridView01.addRow();
@@ -53,12 +70,7 @@ fnObj.pageStart = function () {
   this.gridView01.initView();
   this.formView01.initView();
   _this.pageButtonView.initView();
-
-  if (!modalParams.id) {
-      $('[data-page-btn="delete"]').prop('disabled', true);
-  } else {
-      ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-  }
+  ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
 fnObj.pageButtonView = axboot.viewExtend({
@@ -73,6 +85,7 @@ fnObj.pageButtonView = axboot.viewExtend({
       });
   },
 }); 
+
 
 /*
   **
@@ -99,13 +112,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
           body: {
               onClick: function () {
                   this.self.select(this.dindex, {selectedClear: true});
+                  ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
               }
           }
       });
 
       axboot.buttonClick(this, "data-grid-view-01-btn", {
           "select": function () {
-              ACTIONS.dispatch(ACTIONS.ITEM_ADD, this.item);
+              ACTIONS.dispatch(ACTIONS.SEND_DATA, this.item);
           },
           "close": function () {
               ACTIONS.dispatch(ACTIONS.ITEM_ADD, this.item);
@@ -139,7 +153,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 */
 fnObj.formView01 = axboot.viewExtend(axboot.formView, {
   getDefaultData: function() {
-  
+    return {};
   },
   getData: function() {
     var data = this.modelFormatter.getClearData(this.model.get());

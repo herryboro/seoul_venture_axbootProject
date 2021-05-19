@@ -18,21 +18,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }       
     },
     MODAL_OPEN: function (caller, act, data) {
-        if(!data) {
-            data = {};
-        }
+        var guestInFo = caller.searchView.getData();
 
         axboot.modal.open({
             width: 750,
             height: 400,
             iframe: {
-                param: 'id=' + (data.id || ''),
+                param: {
+                    guestNm: guestInFo.guestNm,
+                    email: guestInFo.email,
+                    guestTel:guestInFo.guestTel
+                },
                 url: 'searchClientModal.jsp',
             },
             header: {tilte: '협력사 등록'},
             callback: function(data) {
                 console.log(data);
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                caller.formView01.setData(data);
                 this.close();
             }
         });
@@ -81,6 +83,10 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["form"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
+        this.guestNm = $('.js-guestNm');
+        this.guestTel = $('.js-guestTel');
+        this.email = $('.js-email');
+
         this.target.find('[data-ax5picker="date"]').ax5picker({
             direction: "auto",
             content: {
@@ -96,7 +102,9 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     },
     getData: function () {
         return {
-            filter: this.filter.val()
+            guestNm: this.guestNm.val(),
+            guestTel: this.guestTel.val(),
+            email: this.email.val()
         }
     }
 });

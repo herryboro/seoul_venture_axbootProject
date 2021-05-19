@@ -59,12 +59,6 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
        return 0;
     }
 
-    // 예약 등록 시 guest 테이블 저장 후 id 가지고 와서 예약등록 guest_id update 하는 로직
-    @Transactional
-    public void updateGuestId(Long guestId, Long reserveId) {
-        update(qReservRegister).set(qReservRegister.guestId, guestId).where(qReservRegister.id.eq(reserveId)).execute();
-    }
-
     @Transactional
     public ReservRegister saveReserveRegisgter(ReservRegisterDto reservRegisterDto) {
         ReservRegister reservRegister = reservRegisterDto.toEntityOfReservRegister();
@@ -89,21 +83,11 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
             String convertNum = "R" + StringUtils.rightPad(today.replace("-", ""), 12, String.valueOf(reservRegister.getSno()));
             reservRegister.setRsvNum(convertNum);
 
-            // guest id
-            reservRegister.setGuestId(100l);
-
             // 숙박정보 save
             ReservRegister save = this.reservRegisterRepository.save(reservRegister);
 
-            // (동시) 투숙객 save
-            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
-            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
-            Long reserveId = save.getId();
-            Long guestId = hotelCustomer.getId();
-
-            if(guestId != 0) {
-                updateGuestId(guestId, reserveId);
-            }
+            Long guestId = reservRegisterDto.getId();
+            update(qReservRegister).set(qReservRegister.guestId, guestId).where(qReservRegister.id.eq(save.getId())).execute();
 
             return save;
         } else {
@@ -114,23 +98,43 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
             String convertNum = "R" + StringUtils.rightPad(today.replace("-", ""), 12, String.valueOf(plusSno));
             reservRegister.setRsvNum(convertNum);
 
-            // guest id
-            reservRegister.setGuestId((long)plusSno);
-
             // 숙박정보 save
             ReservRegister save = this.reservRegisterRepository.save(reservRegister);
 
-            // (동시) 투숙객 save
-            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
-            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
-            Long reserveId = save.getId();
-            Long guestId = hotelCustomer.getId();
-
-            if(reserveId != 0) {
-                updateGuestId(guestId, reserveId);
-            }
+            Long guestId = reservRegisterDto.getId();
+            update(qReservRegister).set(qReservRegister.guestId, guestId).where(qReservRegister.id.eq(save.getId())).execute();
 
             return save;
         }
     }
 }
+
+
+// 예약 등록 시 guest 테이블 저장 후 id 가지고 와서 예약등록 guest_id update 하는 로직
+//    @Transactional
+//    public void updateGuestId(Long guestId, Long reserveId) {
+//        update(qReservRegister).set(qReservRegister.guestId, guestId).where(qReservRegister.id.eq(reserveId)).execute();
+//    }
+
+              // guest id
+//            reservRegister.setGuestId(100l);
+
+//            // (동시) 투숙객 save
+//            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
+//            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
+//            Long reserveId = save.getId();
+//            Long guestId = hotelCustomer.getId();
+//
+//            if(guestId != 0) {
+//                updateGuestId(guestId, reserveId);
+//            }
+
+            // (동시) 투숙객 save
+//            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
+//            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
+//            Long reserveId = save.getId();
+//            Long guestId = hotelCustomer.getId();
+//
+//            if(reserveId != 0) {
+//                updateGuestId(guestId, reserveId);
+//            }
