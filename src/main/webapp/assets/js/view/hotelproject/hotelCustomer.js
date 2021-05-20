@@ -45,14 +45,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function(res) {
                 console.log(res);
                 caller.formView01.setData(res);
+                caller.gridView02.setData(res.customerList);
             }
         });
     },
-    ITEM_ADD: function (caller, act, data) {
-        caller.gridView01.addRow();
-    },
-    ITEM_DEL: function (caller, act, data) {
-        caller.gridView01.delRow("selected");
+    EXCEL_DOWN: function (caller, act, data) {
+        var frm = $('.js-form-excel').get(0);
+        console.log(frm);
+        frm.action = '/api/v1/hotelCustomer/exceldown';
+        frm.enctype = 'application/x-www-form-urlencoded';
+        frm.submit();
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -91,7 +93,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
             },
             "excel": function () {
-
+                ACTIONS.dispatch(ACTIONS.EXCEL_DOWN);
             }
         });
     }
@@ -194,10 +196,18 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-02"]'),
             columns: [
-                {key: "stayDate", label: "투숙일", width: 150, align: "center", editor: "text"},
+                {
+                    key: "stayDate", 
+                    label: "투숙일", 
+                    width: 150, 
+                    align: "center", 
+                    formatter: function() {
+                        return moment(this.item.arrDt).format('YY.M.D') + ' - ' + moment(this.item.depDt).format('YY.M.D');
+                    }    
+                },
                 {key: "nightCnt", label: "숙박수", width: 100, align: "center", editor: "text"},
-                {key: "email", label: "객실번호", width: 100, align: "center", editor: "text"},
-                {key: "roomNum", label: "객실타입", width: 100, align: "center", editor: "text"},
+                {key: "roomNum", label: "객실번호", width: 100, align: "center", editor: "text"},
+                {key: "roomTypCd", label: "객실타입", width: 100, align: "center", editor: "text"},
                 {key: "rsvNum", label: "투숙번호", width: 200, align: "center", editor: "text"}
             ],
             body: {

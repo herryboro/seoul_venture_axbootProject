@@ -31,6 +31,10 @@
                     </ax:tr>
                 </ax:tbl>
             </ax:form>
+
+            <form name="excelForm" class="js-form-excel" method="post">
+            </form>
+
             <div class="H10"></div>
         </div>
 

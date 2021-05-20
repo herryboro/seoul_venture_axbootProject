@@ -95,7 +95,6 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["searchView0"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
-        console.log(this);
         this.roomTypCd = $('.js-roomTyp');
 
     },

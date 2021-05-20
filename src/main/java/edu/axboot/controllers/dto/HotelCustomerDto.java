@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class HotelCustomerDto {
@@ -18,6 +21,7 @@ public class HotelCustomerDto {
     private String gender;
     private String langCd;
     private String rmk;
+    private List<ReservRegister> customerList = new ArrayList<ReservRegister>();
 
     @Builder
     public HotelCustomerDto(Long id, String guestNm, String guestNmEng, String guestTel, String email, String brth, String gender, String langCd, String rmk) {
@@ -56,6 +60,7 @@ public class HotelCustomerDto {
         this.gender = hotelCustomer.getGender();
         this.langCd = hotelCustomer.getLangCd();
         this.rmk = hotelCustomer.getRmk();
+        this.customerList.addAll(hotelCustomer.getCustomerList());
     }
 
     public HotelCustomerDto(ReservRegister reservRegister) {

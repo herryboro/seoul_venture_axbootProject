@@ -1,17 +1,23 @@
 package edu.axboot.domain.reservRegister;
 
+import com.chequer.axboot.core.parameter.RequestParams;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import edu.axboot.controllers.dto.HotelCustomerDto;
 import edu.axboot.controllers.dto.ReservRegisterDto;
+import edu.axboot.controllers.dto.ReserveStatusDto;
 import edu.axboot.domain.education.EducationTeachService;
 import edu.axboot.domain.hotelcustomer.HotelCustomer;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.xpath.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import edu.axboot.domain.BaseService;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +112,50 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
 
             return save;
         }
+    }
+
+    public Page<ReserveStatusDto> getReserveList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
+        String guestNm = requestParams.getString("guestNm", "");
+        String rsvNum = requestParams.getString("rsvNum", "");
+        String rsvDt1 = requestParams.getString("rsvDt1", "");
+        String rsvDt2 = requestParams.getString("rsvDt2", "");
+        String roomTypCd = requestParams.getString("roomTypCd", "");
+        String depDt1 = requestParams.getString("depDt1", "");
+        String depDt2 = requestParams.getString("depDt2", "");
+        String arrDt1 = requestParams.getString("arrDt1", "");
+        String arrDt2 = requestParams.getString("arrDt2", "");
+        String sttusCd = requestParams.getString("sttusCd", "");
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (isNotEmpty(guestNm)) {
+            builder.and(qReservRegister.guestNm.like(guestNm));
+        }
+        if (isNotEmpty(rsvNum)) {
+            builder.and(qReservRegister.rsvNum.like(rsvNum));
+        }
+        if (isNotEmpty(rsvDt1) && isNotEmpty(rsvDt2)) {
+            builder.and(qReservRegister.rsvDt.between(rsvDt1, rsvDt2));
+        }
+        if (isNotEmpty(roomTypCd)) {
+            builder.and(qReservRegister.roomTypCd.like(roomTypCd));
+        }
+        if (isNotEmpty(depDt1) && isNotEmpty(depDt2)) {
+            builder.and(qReservRegister.depDt.between(depDt1, depDt2));
+        }
+        if (isNotEmpty(arrDt1) && isNotEmpty(arrDt2)) {
+            builder.and(qReservRegister.arrDt.between(arrDt1, arrDt2));
+        }
+        if (isNotEmpty(sttusCd)) {
+            builder.and(qReservRegister.sttusCd.like(sttusCd));
+        }
+
+        List<ReservRegister> reserveList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
+
+        int totalSize = reserveList.size();
+        int start = pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());
+        return new PageImpl(reserveList.subList(start, end), pageable, totalSize);
     }
 }
 
