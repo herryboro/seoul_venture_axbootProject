@@ -32,8 +32,8 @@ public class ReservRegisterTest {
         ReservRegisterDto reservRegisterDto = new ReservRegisterDto();
 
         ReservRegisterDto build = reservRegisterDto.builder()
-                .arrDt("2021-05-17")
-                .depDt("2021-05-19")
+//                .arrDt("2021-05-17")
+//                .depDt("2021-05-19")
                 .nightCnt(2)
                 .roomTypCd("SB")
                 .adultCnt(1)

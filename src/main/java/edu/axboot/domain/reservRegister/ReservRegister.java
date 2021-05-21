@@ -1,15 +1,19 @@
 package edu.axboot.domain.reservRegister;
 
 import edu.axboot.domain.BaseJpaModel;
+import edu.axboot.domain.customerinfo.CustomerInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Setter
 @Getter
@@ -105,6 +109,11 @@ public class ReservRegister extends BaseJpaModel<Long> {
 
 	@Column(name = "SVC_PRC", precision = 18, scale = 0)
 	private BigDecimal svcPrc;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
+	@JoinColumn(name = "RSV_NUM", referencedColumnName = "RSV_NUM", insertable = false, updatable = false)
+	private List<CustomerInfo> customerInfo;
 
     @Override
     public Long getId() {

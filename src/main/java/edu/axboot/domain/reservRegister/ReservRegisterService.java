@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import edu.axboot.controllers.dto.HotelCustomerDto;
 import edu.axboot.controllers.dto.ReservRegisterDto;
 import edu.axboot.controllers.dto.ReserveStatusDto;
+import edu.axboot.controllers.dto.ResponseFindGuestByIdDto;
 import edu.axboot.domain.education.EducationTeachService;
 import edu.axboot.domain.hotelcustomer.HotelCustomer;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
@@ -76,7 +77,7 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         reservRegister.setRsvDt(today);
 
         // 상태(STTUS_CD)
-        String sttus = "RSV_01";
+        String sttus = "예약";
         reservRegister.setSttusCd(sttus);
 
         int maxSno = getMaxSno();
@@ -156,6 +157,12 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         int start = pageable.getOffset();
         int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());
         return new PageImpl(reserveList.subList(start, end), pageable, totalSize);
+    }
+
+    public ResponseFindGuestByIdDto findGuestById(Long id) {
+        ReservRegister guestList = reservRegisterRepository.findOne(id);
+        ResponseFindGuestByIdDto responseFindGuestByIdDto = new ResponseFindGuestByIdDto(guestList);
+        return responseFindGuestByIdDto;
     }
 }
 

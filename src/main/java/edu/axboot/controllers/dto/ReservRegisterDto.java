@@ -12,8 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReservRegisterDto {
     private Long id;
-    private String rsvDt1;
-    private String rsvDt2;
+    private String rsvDt;
     private Integer sno;
     private String rsvNum;
     private Long guestId;
@@ -22,11 +21,9 @@ public class ReservRegisterDto {
     private String guestTel;
     private String email;
     private String langCd;
-    private String arrDt1;
-    private String arrDt2;
+    private String arrDt;
     private String arrTime;
-    private String depDt1;
-    private String depDt2;
+    private String depDt;
     private String depTime;
     private Integer nightCnt;
     private String roomTypCd;
@@ -49,15 +46,14 @@ public class ReservRegisterDto {
 
     @Builder
     public ReservRegisterDto(
-            Long id, String rsvDt1, String rsvDt2, Integer sno, String rsvNum, Long guestId, String guestNm,
-            String guestNmEng, String guestTel, String email, String langCd, String arrDt1, String arrDt2, String arrTime,
-            String depDt1, String depDt2, String depTime, Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt,
+            Long id, String rsvDt, Integer sno, String rsvNum, Long guestId, String guestNm,
+            String guestNmEng, String guestTel, String email, String langCd, String arrDt, String arrTime,
+            String depDt, String depTime, Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt,
             Integer chldCnt, String saleTypCd, String sttusCd, String srcCd, String brth, String gender, String payCd,
             String advnYn, BigDecimal salePrc, BigDecimal svcPrc, List<CustomerInfoDto> memoList, boolean __created__, boolean __modified__,boolean __deleted__) {
 
         this.id = id;
-        this.rsvDt1 = rsvDt1;
-        this.rsvDt2 = rsvDt2;
+        this.rsvDt = rsvDt;
         this.sno = sno;
         this.rsvNum = rsvNum;
         this.guestId = guestId;
@@ -66,11 +62,9 @@ public class ReservRegisterDto {
         this.guestTel = guestTel;
         this.email = email;
         this.langCd = langCd;
-        this.arrDt1 = arrDt1;
-        this.arrDt2 = arrDt2;
+        this.arrDt = arrDt;
         this.arrTime = arrTime;
-        this.depDt1 = depDt1;
-        this.depDt2 = depDt2;
+        this.depDt = depDt;
         this.depTime = depTime;
         this.nightCnt = nightCnt;
         this.roomTypCd = roomTypCd;
@@ -101,9 +95,9 @@ public class ReservRegisterDto {
                 .guestTel(guestTel)
                 .email(email)
                 .langCd(langCd)
-//                .arrDt(arrDt)
+                .arrDt(arrDt)
                 .arrTime(arrTime)
-//                .depDt(depDt)
+                .depDt(depDt)
                 .depTime(depTime)
                 .nightCnt(nightCnt)
                 .roomTypCd(roomTypCd)

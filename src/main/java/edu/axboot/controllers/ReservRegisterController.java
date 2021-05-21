@@ -3,10 +3,7 @@ package edu.axboot.controllers;
 import com.chequer.axboot.core.api.response.Responses;
 import com.chequer.axboot.core.controllers.BaseController;
 import com.chequer.axboot.core.parameter.RequestParams;
-import edu.axboot.controllers.dto.CustomerInfoDto;
-import edu.axboot.controllers.dto.HerryboroHotelDto;
-import edu.axboot.controllers.dto.ReservRegisterDto;
-import edu.axboot.controllers.dto.ReserveStatusDto;
+import edu.axboot.controllers.dto.*;
 import edu.axboot.domain.customerinfo.CustomerInfo;
 import edu.axboot.domain.customerinfo.CustomerInfoService;
 import edu.axboot.domain.education.EducationTeach;
@@ -18,12 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import com.chequer.axboot.core.api.response.ApiResponse;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import edu.axboot.domain.reservRegister.ReservRegister;
 import edu.axboot.domain.reservRegister.ReservRegisterService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -46,6 +40,11 @@ public class ReservRegisterController extends BaseController {
         Page<ReserveStatusDto> reserveList = reservRegisterService.getReserveList(requestParams, pageable);
 
         return Responses.PageResponse.of(reserveList);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public ResponseFindGuestByIdDto findGuestById(@PathVariable Long id) {
+        return reservRegisterService.findGuestById(id);
     }
 
     @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)

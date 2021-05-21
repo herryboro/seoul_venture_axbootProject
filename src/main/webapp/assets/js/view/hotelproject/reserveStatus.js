@@ -1,11 +1,15 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        var obj = $.extend({}, caller.searchView.getData(), data);
+        console.log(obj);
+
         axboot.ajax({
             type: "GET",
             url: '/api/v1/reservRegister',
-            data: caller.searchView.getData(),
+            data: obj,
             callback: function (res) {
+                console.log(res);
                 caller.gridView01.setData(res);
             },
             options: {
@@ -32,14 +36,25 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    ITEM_CLICK: function (caller, act, data) {
+    MODAL_OPEN: function (caller, act, data) {
+        console.log(data.id);
 
-    },
-    ITEM_ADD: function (caller, act, data) {
-        caller.gridView01.addRow();
-    },
-    ITEM_DEL: function (caller, act, data) {
-        caller.gridView01.delRow("selected");
+        axboot.modal.open({
+            width: 1300,
+            height: 750,
+            iframe: {
+                param: 'id=' + data.id,
+                url: 'reserveListModal.jsp',
+            },
+            header: { title: '예약조회' },
+            callback: function (data) {
+                console.log(data);
+                if (data && data.dirty) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
+                this.close();
+            },
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -90,12 +105,36 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["form"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
+        this.guestNm = $('.js-guestNm');
+        this.rsvNum = $('.js-rsvNum');
+        this.rsvDt1 = $('.js-rsvDt1');
+        this.rsvDt2 = $('.js-rsvDt2');
+        this.roomTypCd = $('.js-roomTypCd');
+        this.depDt1 = $('.js-depDt1');
+        this.depDt2 = $('.js-depDt2');
+        this.arrDt1 = $('.js-arrDt1');
+        this.arrDt2 = $('.js-arrDt2');
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
     },
     getData: function () {
         return {
-            pageNumber: this.pageNumber,
-            pageSize: this.pageSize,
-            filter: this.filter.val()
+            pageNumber: this.pageNumber || 0,
+            pageSize: this.pageSize || 5,
+            guestNm: this.guestNm.val(),
+            rsvNum: this.rsvNum.val(),
+            rsvDt1: this.rsvDt1.val(),
+            rsvDt2: this.rsvDt2.val(),
+            roomTypCd: this.roomTypCd.val(),
+            depDt1: this.depDt1.val(),
+            depDt2: this.depDt2.val(),
+            arrDt1: this.arrDt1.val(),
+            arrDt2: this.arrDt2.val(),
+            sttusCd: $('input[name="sttusCd"]:checked').val()
         }
     }
 });
@@ -109,26 +148,33 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
 
         this.target = axboot.gridBuilder({
+            onPageChange: function (pageNumber) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, { pageNumber: pageNumber });
+            },
             showRowSelector: true,
             frozenColumnIndex: 0,
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "rsvNum", label: "예약번호", width: 120, align: "center", editor: "text"},
-                {key: "rsvDt", label: "예약일", width: 120, align: "center", editor: "text"},
-                {key: "guestNm", label: "투숙객", width: 100, align: "center", editor: "text"},
-                {key: "roomTypCd", label: "객실타입", width: 100, align: "center", editor: "text"},
-                {key: "roomNum", label: "객실번호", width: 100, align: "center", editor: "text"},
-                {key: "depDt", label: "도착일", width: 150, align: "center", editor: "text"},
-                {key: "arrDt", label: "출발일", width: 150, align: "center", editor: "text"},
-                {key: "srcCd", label: "예약경로", width: 100, align: "center", editor: "text"},
-                {key: "saleTypCd", label: "판매유형", width: 100, align: "center", editor: "text"},
-                {key: "sttusCd", label: "상태", width: 100, align: "center", editor: "text"}
+                {key: "rsvNum", label: "예약번호", width: 120, align: "center"},
+                {key: "rsvDt", label: "예약일", width: 120, align: "center"},
+                {key: "guestNm", label: "투숙객", width: 100, align: "center"},
+                {key: "roomTypCd", label: "객실타입", width: 100, align: "center"},
+                {key: "roomNum", label: "객실번호", width: 100, align: "center"},
+                {key: "depDt", label: "도착일", width: 150, align: "center"},
+                {key: "arrDt", label: "출발일", width: 150, align: "center"},
+                {key: "srcCd", label: "예약경로", width: 100, align: "center"},
+                {key: "saleTypCd", label: "판매유형", width: 100, align: "center"},
+                {key: "sttusCd", label: "상태", width: 100, align: "center"}
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, {selectedClear: true});
-                }
+                },
+                onDBLClick: function () {
+                    ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
+                },
+
             }
         });
 
