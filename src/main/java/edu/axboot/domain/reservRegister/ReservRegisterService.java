@@ -130,7 +130,7 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (isNotEmpty(guestNm)) {
-            builder.and(qReservRegister.guestNm.like(guestNm));
+            builder.and(qReservRegister.guestNm.like("%" + guestNm + "%"));
         }
         if (isNotEmpty(rsvNum)) {
             builder.and(qReservRegister.rsvNum.like(rsvNum));

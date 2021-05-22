@@ -24,15 +24,20 @@
         <ax:split-layout name="ax1" orientation="horizontal">
             <ax:split-panel width="*" style="">
                 <ax:split-panel width="*" style="padding-left: 10px;">
-                    <div data-ax-td style="width:30%"> 
-                        <div>
-                            <div style="display: inline;"> 예약 번호: </div>
-                            <div style="display: inline;" class="res_nm"></div>
-                        </div>
-                    </div>
+                    
                         <form name="form" class="js-form" onsubmit="return false;">
+                            <div data-ax-tr>
+                                <div data-ax-td style="display: flex;"> 
+                                    <div data-ax-td>
+                                        <div style="display: inline;"> 예약 번호: </div>
+                                        <div style="display: inline;" class="res_nm"></div>
+                                    </div>
+                                    <div data-ax-td style="margin-left: 10px;">
+                                        <ax:common-code groupCd="PMS_STAY_STATUS" dataPath="sttusCd" clazz="js-room-type" emptyText="전체" />
+                                    </div>
+                                </div>
+                            </div>
                             <div data-ax-tbl class="ax-form-tbl">
-        
                                 <div data-ax-tr>
                                     <div data-ax-td style="width:30%">
                                         <div data-ax-td-label style="width:120px;" rowspan="3">

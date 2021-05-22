@@ -7,21 +7,32 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: 'GET',
             url: '/api/v1/reservRegister/' + modalParams.id,
-            callback: function (res) {
-                for(var i = 0; i < res.customerInfos.length; i++) {
-                  console.log(res.customerInfos[i].memoDtti.subString(0, 10));
-                }
-                
+            callback: function (res) {        
+                console.log(res);  
                 caller.formView01.setData(res);
+
+                for(var i = 0; i < res.customerInfos.length; i++) {
+                    var dateString = res.customerInfos[i].memoDtti.substring(0, 10);
+                    res.customerInfos[i].memoDtti = dateString;
+                }
                 caller.gridView01.setData(res.customerInfos);
+                $(".res_nm").html(res.rsvNum);
             }
         });
     },
     ITEM_ADD: function (caller, act, data) {
-      caller.gridView01.addRow();
+        caller.gridView01.addRow();
     },
     ITEM_DEL: function (caller, act, data) {
-      caller.gridView01.delRow("selected");
+        caller.gridView01.delRow("selected");
+    },
+    MODAL_OPEN:function(caller, act, data) {
+        console.log(data);
+
+        var modal = fnObj.getModal();
+        if (modal) modal.callback(data);
+        // if (opener) window.close();
+        
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -39,25 +50,25 @@ var CODE = {};
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
 
-    // this.pageButtonView.initView();
+    this.pageButtonView.initView();
     this.formView01.initView();
     this.gridView01.initView();
 
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
-// fnObj.pageButtonView = axboot.viewExtend({
-//     initView: function () {
-//         axboot.buttonClick(this, 'data-page-btn', {
-//             save: function () {
-//                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-//             },
-//             close: function () {
-//                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
-//             },
-//         });
-//     },
-// });
+fnObj.pageButtonView = axboot.viewExtend({
+    initView: function () {
+        axboot.buttonClick(this, 'data-page-btn', {
+            save: function () {
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            }
+            // create: function () {
+            //     ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
+            // },
+        });
+    },
+});
 
 /**
  * formView
@@ -128,59 +139,62 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
  * gridView
  */
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-  initView: function () {
-      var _this = this;
+    initView: function () {
+        var _this = this;
 
-      this.target = axboot.gridBuilder({
-          showLineNumber: false,
-          showRowSelector: false,
-          frozenColumnIndex: 0,
-          multipleSelect: false,
-          target: $('[data-ax5grid="grid-view-01"]'),
-          columns: [
-              {
-                  key: "memoDtti", 
-                  label: "작성일", 
-                  width: 400, 
-                  align: "center", 
-                  editor: {
-                      type: "date", config: {}
-                  }
-              },
-              {key: "memoCn", label: "메모", width: 900, align: "center", editor: "text"}
-          ],
-          body: {
-              onClick: function () {
-                  this.self.select(this.dindex, {selectedClear: true});
-              }
-          }
-      });
+        this.target = axboot.gridBuilder({
+            showLineNumber: false,
+            showRowSelector: false,
+            frozenColumnIndex: 0,
+            multipleSelect: false,
+            target: $('[data-ax5grid="grid-view-01"]'),
+            columns: [
+                {
+                    key: "memoDtti", 
+                    label: "작성일", 
+                    width: 400, 
+                    align: "center", 
+                    editor: {
+                        type: "date", config: {}
+                    }
+                },
+                {key: "memoCn", label: "메모", width: 900, align: "center", editor: "text"}
+            ],
+            body: {
+                onClick: function () {
+                    this.self.select(this.dindex, {selectedClear: true});
+                }
+            }
+        });
 
-      axboot.buttonClick(this, "data-grid-view-01-btn", {
-        "add": function () {
-            ACTIONS.dispatch(ACTIONS.ITEM_ADD);
-        },
-        "delete": function () {
-            ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+        axboot.buttonClick(this, "data-grid-view-01-btn", {
+            "add": function () {
+                ACTIONS.dispatch(ACTIONS.ITEM_ADD);
+            },
+            "delete": function () {
+                ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+            },
+            "create": function() {
+                ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
+            }
+        });
+    },
+    getData: function (_type) {
+        var list = [];
+        var _list = this.target.getList(_type);
+
+        if (_type == "modified" || _type == "deleted") {
+            list = ax5.util.filter(_list, function () {
+                delete this.deleted;
+                return this.key;
+            });
+        } else {
+            list = _list;
         }
-    });
-  },
-  getData: function (_type) {
-      var list = [];
-      var _list = this.target.getList(_type);
-
-      if (_type == "modified" || _type == "deleted") {
-          list = ax5.util.filter(_list, function () {
-              delete this.deleted;
-              return this.key;
-          });
-      } else {
-          list = _list;
-      }
-      return list;
-  },
-  addRow: function () {
-      this.target.addRow({__created__: true}, "last");
-  }
+        return list;
+    },
+    addRow: function () {
+        this.target.addRow({__created__: true}, "last");
+    }
 });
 
