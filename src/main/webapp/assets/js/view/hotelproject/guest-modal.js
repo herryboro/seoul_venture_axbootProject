@@ -1,24 +1,15 @@
-var modalParams = modalParams || {};
+// var modalParams = modalParams || {};
+// console.log(modalParams);
+
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        var res = {
-            page: { totalPages: 1, totalElements: 2, currentPage: 0, pageSize: 50 },
-            list: [
-                { id: 1, guestNm: '신현우', guestNmEng: 'david', guestTel: '', email: 'okrsdavid@gmail.com', gender: 'M', langCd: 'KO' },
-                { id: 2, guestNm: '전만호', guestNmEng: 'mano', guestTel: '', email: 'okarmano@gmail.com', gender: 'M', langCd: 'KO' },
-            ],
-        };
-        
-        caller.gridView01.clear();
-        caller.gridView01.setData(res);
-        return;
-
         var paramObj = $.extend(caller.searchView.getData(), data);
+        console.log(paramObj);
 
         axboot.ajax({
             type: 'GET',
-            url: '/api/v1/base/guest',
+            url: '/api/v1/hotelCustomer',
             data: paramObj,
             callback: function (res) {
                 caller.gridView01.clear();
@@ -79,8 +70,8 @@ fnObj.pageStart = function () {
     this.gridView01.initView();
     this.formView01.initView();
 
-    this.searchView.guestNm.val(modalParams.guestNm);
-    this.searchView.guestTel.val(modalParams.guestTel);
+    // this.searchView.guestNm.val(modalParams.guestNm);
+    // this.searchView.guestTel.val(modalParams.guestTel);
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
@@ -119,13 +110,15 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
 
         this.guestNm = $('.js-guestNm');
         this.guestTel = $('.js-guestTel');
+        this.email = $('.js-email');
     },
     getData: function () {
         return {
             pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 50,
+            pageSize: this.pageSize || 5,
             guestNm: this.guestNm.val(),
             guestTel: this.guestTel.val(),
+            email: this.email.val()
         };
     },
 });
@@ -146,28 +139,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 { key: 'guestNm', label: '이름', width: 100, align: 'center' },
                 { key: 'guestTel', label: '연락처', width: 100, align: 'center' },
                 { key: 'email', label: '이메일', width: '*', align: 'center' },
-                {
-                    key: 'gender',
-                    label: '성별',
-                    width: 40,
-                    align: 'center',
-                    formatter: function () {
-                        if (!this.value) return '';
-                        if (this.value === 'M') {
-                            return '남';
-                        } else if (this.value === 'F') {
-                            return '여';
-                        } else {
-                            return '';
-                        }
-                    },
-                },
                 { key: 'brth', label: '생일', width: 150, align: 'center' },
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, { selectedClear: true });
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                    ACTIONS.dispatch(ACTIONS.PAGE_CHOICE, this.item);
                 },
                 onDBLClick: function () {
                     ACTIONS.dispatch(ACTIONS.PAGE_CHOICE, this.item);

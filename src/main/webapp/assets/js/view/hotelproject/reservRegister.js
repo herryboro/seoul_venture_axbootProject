@@ -133,7 +133,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         type: "date", config: {}
                     }
                 },
-                {key: "memoCn", label: "메모", width: 1012, align: "center", editor: "text"}
+                {key: "memoCn", label: "메모", width: 900, align: "center", editor: "text"}
             ],
             body: {
                 onClick: function () {

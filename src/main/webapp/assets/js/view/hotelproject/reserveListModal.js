@@ -20,19 +20,32 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    PAGE_SAVE: function (caller, act, data) {
+        var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
+        console.log(sendObj);
+
+        axboot.ajax({
+            type: "POST",
+            url: '/api/v1/reservRegister/updateModalInfo',
+            data: JSON.stringify(sendObj),
+            callback: function (res) {
+                console.log(res);
+                axToast.push("저장 되었습니다");
+                $(".res_nm").html(res.message);
+            }
+        });   
+    },
     ITEM_ADD: function (caller, act, data) {
         caller.gridView01.addRow();
     },
     ITEM_DEL: function (caller, act, data) {
         caller.gridView01.delRow("selected");
+        caller.formView01.getData().customerInfos[0].delYn = 'Y';
+        console.log(caller.formView01.getData());
     },
-    MODAL_OPEN:function(caller, act, data) {
-        console.log(data);
-
-        var modal = fnObj.getModal();
-        if (modal) modal.callback(data);
-        // if (opener) window.close();
-        
+    MODAL_IN_MODAL: function(caller, act, data) {
+        data = caller.formView01.model.get() || {}; 
+        caller.guestModalView.open(data);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -53,6 +66,7 @@ fnObj.pageStart = function () {
     this.pageButtonView.initView();
     this.formView01.initView();
     this.gridView01.initView();
+    this.guestModalView.initView();
 
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
@@ -83,12 +97,19 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         return $.extend({}, data);
     },
     setData: function (data) {
+        if (typeof data === 'undefined') data = this.getDefaultData();
+        data = $.extend({}, data);
         console.log(data);
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    setGuest: function(data) {
         if (typeof data === 'undefined') data = this.getDefaultData();
         data = $.extend({}, data);
 
         this.model.setModel(data);
-        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+        this.modelFormatter.formatting();
     },
     // validate: function () {
     //     var item = this.model.get();
@@ -175,7 +196,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.ITEM_DEL);
             },
             "create": function() {
-                ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
+                ACTIONS.dispatch(ACTIONS.MODAL_IN_MODAL);
             }
         });
     },
@@ -196,5 +217,39 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     addRow: function () {
         this.target.addRow({__created__: true}, "last");
     }
+});
+
+/**
+ * modal
+ */
+fnObj.guestModalView = axboot.viewExtend({
+    open: function (data) {
+        console.log(data);
+
+        var _this = this;
+        console.log(this);
+        if (!data) data = {};
+
+        this.modal.open({
+            width: 760,
+            height: 600,
+            header: false,
+            iframe: {
+                param: 'guestNm=' + (data.guestNm || '') + '&guestTel=' + (data.guestTel || '') + '&modalView=guestModalView',
+                url: 'guest-modal.jsp',
+            },
+        });
+    },
+    close: function () {
+        this.modal.close();
+    },
+    callback: function (data) {
+        console.log(data);
+        fnObj.formView01.setGuest(data);
+        this.modal.close();
+    },
+    initView: function () {
+        this.modal = new ax5.ui.modal();
+    },
 });
 

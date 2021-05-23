@@ -32,14 +32,16 @@
                                         <div style="display: inline;"> 예약 번호: </div>
                                         <div style="display: inline;" class="res_nm"></div>
                                     </div>
-                                    <div data-ax-td style="margin-left: 10px;">
+                                    <div data-ax-td style="margin-left: 10px; margin-right: 10px;">
                                         <ax:common-code groupCd="PMS_STAY_STATUS" dataPath="sttusCd" clazz="js-room-type" emptyText="전체" />
                                     </div>
+                                    <button type="button" class="js-save" data-page-btn="save" style="margin-right: 3px;"><i class="cqc-save"></i> 저장</button>
+                                    <button type="button" class="js-closed" data-page-btn="reload"><i class="cqc-save"></i> 닫기</button>
                                 </div>
                             </div>
                             <div data-ax-tbl class="ax-form-tbl">
                                 <div data-ax-tr>
-                                    <div data-ax-td style="width:30%">
+                                    <div data-ax-td style="width:30%" style="display: flex;">
                                         <div data-ax-td-label style="width:120px;" rowspan="3">
                                             <div style="display: inline; color: red;">* </div>도착일
                                         </div>
@@ -254,7 +256,6 @@
                                 </div>
                             </div>
                         </form>
-        
                     </div>
                 </ax:split-panel>
             </ax:split-panel>

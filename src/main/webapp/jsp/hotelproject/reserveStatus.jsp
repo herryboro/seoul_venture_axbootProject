@@ -114,13 +114,16 @@
             <ax:split-panel width="*" style="">
 
                 <!-- 목록 -->
-                <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="ax-button-group" data-fit-height-aside="grid-view-01" style="display: flex; justify-content: space-between;">
                     <div class="left">
                         <h2><i class="cqc-list"></i>
                             예약 목록 </h2>
                     </div>
-                    <div class="right">
-                        <button type="button" class="btn btn-default" data-grid-view-01-btn=""></i> 상태 변경</button>
+                    <div class="right" style="display: flex;">
+                        <div data-ax-td style="width: 100px;">
+                            <ax:common-code groupCd="PMS_STAY_STATUS" dataPath="sttusCd" clazz="js-sttusCdB" emptyText="전체"/>
+                        </div>
+                        <button type="button" class="btn btn-default" data-grid-view-01-btn="saveSttus" style="height: 27px; margin-left: 5px;"></i> 상태 변경</button>
                     </div>
                 </div>
                 <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>

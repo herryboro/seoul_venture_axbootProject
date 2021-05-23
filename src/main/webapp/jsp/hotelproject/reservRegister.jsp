@@ -212,7 +212,7 @@
                                 </div>
                                 
                                 <div data-ax-tr style="height: 1px;">
-                                    <div data-ax-td style="width:100%">
+                                    <div data-ax-td style="width:100%;">
                                         <div data-ax-td-label style="width:120px;">투숙 메모</div>
                                         <div data-ax-td-wrap>
                                             <div data-ax-tr>
@@ -234,7 +234,7 @@
                                             </div>
                                             <div data-ax-tr>
                                                 <div data-ax-td style="width:100%">
-                                                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>                 
+                                                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01"></div>                 
                                                 </div>       
                                             </div>
                                         </div>                       

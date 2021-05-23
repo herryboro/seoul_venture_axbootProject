@@ -53,6 +53,12 @@
                                 <input type="text" name="guestTel" class="form-control js-guestTel" />
                             </div>
                         </div>
+                        <div data-ax-td style="width:360px;">
+                            <div data-ax-td-label>이메일</div>
+                            <div data-ax-td-wrap>
+                                <input type="text" name="email" class="form-control js-email" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -129,14 +135,6 @@
                                                     <input type="text" name="brth" data-ax-path="brth" class="form-control" placeholder="yyyy-mm-dd" />
                                                     <span class="input-group-addon"><i class="cqc-calendar js-brth-open"></i></span>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gender-M" class="radio-inline">
-                                                    <input type="radio" data-ax-path="gender" name="gender" id="gender-M" value="M"/>남
-                                                </label>
-                                                <label for="gender-F" class="radio-inline">
-                                                    <input type="radio" data-ax-path="gender" name="gender" id="gender-F" value="F"/>여
-                                                </label>
                                             </div>
                                         </div>
                                     </div>

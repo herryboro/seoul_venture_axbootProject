@@ -76,15 +76,15 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         String today = date.format(dateTimeFormatter); //LocalDate 객체를 String 객체로 바꿈
         reservRegister.setRsvDt(today);
 
-        // 상태(STTUS_CD)
-        String sttus = "예약";
-        reservRegister.setSttusCd(sttus);
-
         int maxSno = getMaxSno();
 
         if (maxSno == 0) {
             // 초기 sno
             reservRegister.setSno(100);
+
+            // 상태(STTUS_CD)
+            String sttus = "예약";
+            reservRegister.setSttusCd(sttus);
 
             // 예약 번호
             String convertNum = "R" + StringUtils.rightPad(today.replace("-", ""), 12, String.valueOf(reservRegister.getSno()));
@@ -101,6 +101,10 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
             int plusSno = ++maxSno;
             reservRegister.setSno(plusSno);
 
+            // 상태(STTUS_CD)
+            String sttus = "예약";
+            reservRegister.setSttusCd(sttus);
+
             // 예약 번호
             String convertNum = "R" + StringUtils.rightPad(today.replace("-", ""), 12, String.valueOf(plusSno));
             reservRegister.setRsvNum(convertNum);
@@ -113,6 +117,37 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
 
             return save;
         }
+    }
+
+    @Transactional
+    public List<ReservRegister> updateInModal(ReservRegisterDto reservRegisterDto) {
+
+        update(qReservRegister)
+                .set(qReservRegister.rsvNum, reservRegisterDto.getRsvNum())
+                .set(qReservRegister.rsvDt, reservRegisterDto.getRsvDt())
+                .set(qReservRegister.guestNm, reservRegisterDto.getGuestNm())
+                .set(qReservRegister.guestNmEng, reservRegisterDto.getGuestNmEng())
+                .set(qReservRegister.guestTel, reservRegisterDto.getGuestTel())
+                .set(qReservRegister.email, reservRegisterDto.getEmail())
+                .set(qReservRegister.langCd, reservRegisterDto.getLangCd())
+                .set(qReservRegister.arrDt, reservRegisterDto.getArrDt())
+                .set(qReservRegister.depDt, reservRegisterDto.getDepDt())
+                .set(qReservRegister.nightCnt, reservRegisterDto.getNightCnt())
+                .set(qReservRegister.roomTypCd, reservRegisterDto.getRoomTypCd())
+                .set(qReservRegister.adultCnt, reservRegisterDto.getAdultCnt())
+                .set(qReservRegister.chldCnt, reservRegisterDto.getChldCnt())
+                .set(qReservRegister.saleTypCd, reservRegisterDto.getSaleTypCd())
+                .set(qReservRegister.sttusCd, reservRegisterDto.getSttusCd())
+                .set(qReservRegister.srcCd, reservRegisterDto.getSrcCd())
+                .set(qReservRegister.brth, reservRegisterDto.getBrth())
+                .set(qReservRegister.gender, reservRegisterDto.getGender())
+                .set(qReservRegister.payCd, reservRegisterDto.getPayCd())
+                .set(qReservRegister.advnYn, reservRegisterDto.getAdvnYn())
+                .where(qReservRegister.id.eq(reservRegisterDto.getId()))
+                .execute();
+
+        List<ReservRegister> fetch = select().from(qReservRegister).where(qReservRegister.id.eq(reservRegisterDto.getId())).fetch();
+        return fetch;
     }
 
     public Page<ReserveStatusDto> getReserveList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
@@ -165,33 +200,3 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return responseFindGuestByIdDto;
     }
 }
-
-
-// 예약 등록 시 guest 테이블 저장 후 id 가지고 와서 예약등록 guest_id update 하는 로직
-//    @Transactional
-//    public void updateGuestId(Long guestId, Long reserveId) {
-//        update(qReservRegister).set(qReservRegister.guestId, guestId).where(qReservRegister.id.eq(reserveId)).execute();
-//    }
-
-              // guest id
-//            reservRegister.setGuestId(100l);
-
-//            // (동시) 투숙객 save
-//            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
-//            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
-//            Long reserveId = save.getId();
-//            Long guestId = hotelCustomer.getId();
-//
-//            if(guestId != 0) {
-//                updateGuestId(guestId, reserveId);
-//            }
-
-            // (동시) 투숙객 save
-//            HotelCustomerDto hotelCustomerDto = new HotelCustomerDto(save);
-//            HotelCustomer hotelCustomer = hotelCustomerService.save(hotelCustomerDto);
-//            Long reserveId = save.getId();
-//            Long guestId = hotelCustomer.getId();
-//
-//            if(reserveId != 0) {
-//                updateGuestId(guestId, reserveId);
-//            }

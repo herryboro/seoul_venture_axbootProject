@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.axboot.domain.BaseService;
 import javax.inject.Inject;
 import com.chequer.axboot.core.parameter.RequestParams;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -66,7 +67,28 @@ public class CustomerInfoService extends BaseService<CustomerInfo, Long> {
         }
     }
 
+    @Transactional
+    public void updatMemo(List<CustomerInfoDto> memoList, String rsvNum) {
+        for (int i = 0; i < memoList.size(); i++) {
+            // 수정
+            if (memoList.get(i).getDelYn().equals("N")) {
+                update(qCustomerInfo)
+                        .set(qCustomerInfo.memoCn, memoList.get(i).getMemoCn())
+                        .set(qCustomerInfo.memoDtti, memoList.get(i).getMemoDtti())
+                        .where(qCustomerInfo.rsvNum.eq(rsvNum))
+                        .execute();
+            } else if(memoList.get(i).getDelYn().equals("Y")) {
+                delete(qCustomerInfo).where(qCustomerInfo.id.eq(memoList.get(i).getId())).execute();
+            } else if(memoList.get(i).getDelYn() == null){
+                saveMemo(memoList, rsvNum);
+            }
+
+        }
+    }
+
     public List<CustomerInfo> gets(RequestParams<CustomerInfo> requestParams) {
         return findAll();
     }
+
+
 }

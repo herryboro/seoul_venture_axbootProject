@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class CustomerInfoDto {
+    private Long id;
     private String rsvNm;
     private int sno;
     private String memoCn;
@@ -21,7 +22,8 @@ public class CustomerInfoDto {
     private List<CustomerInfoDto> customerInfoDtos;
 
     @Builder
-    public CustomerInfoDto(String rsvNm, int sno, String memoCn, Timestamp memoDtti, String memoMan, String delYn, List<CustomerInfoDto> customerInfoDtos) {
+    public CustomerInfoDto(Long id, String rsvNm, int sno, String memoCn, Timestamp memoDtti, String memoMan, String delYn, List<CustomerInfoDto> customerInfoDtos) {
+        this.id = id;
         this.rsvNm = rsvNm;
         this.sno = sno;
         this.memoCn = memoCn;

@@ -54,4 +54,12 @@ public class ReservRegisterController extends BaseController {
 
         return ok(reservRegister.getRsvNum());
     }
+
+    @RequestMapping(value = "/updateModalInfo", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
+    public ApiResponse updateInModal(@RequestBody ReservRegisterDto reservRegisterDto) {
+        List<ReservRegister> reservRegister = reservRegisterService.updateInModal(reservRegisterDto);
+        customerInfoService.updatMemo(reservRegisterDto.getMemoList(), reservRegister.get(0).getRsvNum());
+
+        return ok(reservRegister.get(0).getRsvNum());
+    }
 }

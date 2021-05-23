@@ -123,7 +123,7 @@ public class ReservRegister extends BaseJpaModel<Long> {
     @Builder
 	public ReservRegister(Long id, String rsvDt, Integer sno, Long guestId, String guestNm, String guestNmEng,
 						  String guestTel, String email, String langCd, String arrDt, String arrTime, String depDt, String depTime,
-						  Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt, Integer chldCnt, String saleTypCd,
+						  Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt, Integer chldCnt, String saleTypCd, String sttusCd,
 						  String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc,
 						  BigDecimal svcPrc) {
 

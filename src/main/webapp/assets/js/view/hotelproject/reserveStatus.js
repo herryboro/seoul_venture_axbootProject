@@ -56,6 +56,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             },
         });
     },
+    UPDATE_STTUS: function(caller, act, data) {
+        var status = $('.js-sttusCdB').val();
+        var list = [].concat(caller.gridView01.getData('selected'));
+        
+        axboot.ajax({
+            type: "GET",
+            url: '/api/v1/reservRegister',
+            data: obj,
+            callback: function (res) {
+                console.log(res);
+                caller.gridView01.setData(res);
+            },
+            options: {
+                // axboot.ajax 함수에 2번째 인자는 필수가 아닙니다. ajax의 옵션을 전달하고자 할때 사용합니다.
+                onError: function (err) {
+                    console.log(err);
+                }
+            }
+        });
+
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -124,7 +145,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     getData: function () {
         return {
             pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 5,
+            pageSize: this.pageSize || 10,
             guestNm: this.guestNm.val(),
             rsvNum: this.rsvNum.val(),
             rsvDt1: this.rsvDt1.val(),
@@ -179,11 +200,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         });
 
         axboot.buttonClick(this, "data-grid-view-01-btn", {
-            "add": function () {
-                ACTIONS.dispatch(ACTIONS.ITEM_ADD);
-            },
-            "delete": function () {
-                ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+            "saveSttus": function () {
+                ACTIONS.dispatch(ACTIONS.UPDATE_STTUS);
             }
         });
     },

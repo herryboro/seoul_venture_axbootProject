@@ -105,6 +105,7 @@ public class ReservRegisterDto {
                 .adultCnt(adultCnt)
                 .chldCnt(chldCnt)
                 .saleTypCd(saleTypCd)
+                .sttusCd(sttusCd)
                 .srcCd(srcCd)
                 .brth(brth)
                 .gender(gender)
