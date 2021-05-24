@@ -194,9 +194,38 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return new PageImpl(reserveList.subList(start, end), pageable, totalSize);
     }
 
+    public Page<ReserveStatusDto> getFrontList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
+        String guestNm = requestParams.getString("guestNm", "");
+        String rsvNum = requestParams.getString("rsvNum", "");
+        String rsvDt = requestParams.getString("rsvDt", "");
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (isNotEmpty(guestNm)) {
+            builder.and(qReservRegister.guestNm.like("%" + guestNm + "%"));
+        }
+        if (isNotEmpty(rsvNum)) {
+            builder.and(qReservRegister.rsvNum.like(rsvNum));
+        }
+        if (isNotEmpty(rsvDt)) {
+            builder.and(qReservRegister.rsvDt.eq(rsvDt));
+        }
+        builder.or(qReservRegister.sttusCd.eq("예약"));
+        builder.or(qReservRegister.sttusCd.eq("예약대기"));
+        builder.or(qReservRegister.sttusCd.eq("예약확정"));
+
+        List<ReservRegister> frontList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
+        int totalSize = frontList.size();
+        int start = pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());
+        return new PageImpl(frontList.subList(start, end), pageable, totalSize);
+    }
+
     public ResponseFindGuestByIdDto findGuestById(Long id) {
         ReservRegister guestList = reservRegisterRepository.findOne(id);
         ResponseFindGuestByIdDto responseFindGuestByIdDto = new ResponseFindGuestByIdDto(guestList);
         return responseFindGuestByIdDto;
     }
+
+
 }

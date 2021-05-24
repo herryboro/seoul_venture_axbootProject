@@ -47,6 +47,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         data = caller.formView01.model.get() || {}; 
         caller.guestModalView.open(data);
     },
+    ROOMTY_SELECT: function(caller, act, data) {
+      caller.roomTyModal.open();
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != 'error') {
@@ -67,6 +70,7 @@ fnObj.pageStart = function () {
     this.formView01.initView();
     this.gridView01.initView();
     this.guestModalView.initView();
+    this.roomTyModal.initView();
 
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
@@ -74,12 +78,9 @@ fnObj.pageStart = function () {
 fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
         axboot.buttonClick(this, 'data-page-btn', {
-            save: function () {
+            save: function() {
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
             }
-            // create: function () {
-            //     ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
-            // },
         });
     },
 });
@@ -195,7 +196,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             },
             "create": function() {
                 ACTIONS.dispatch(ACTIONS.MODAL_IN_MODAL);
-            }
+            },
+            "roomTySelect": function() {
+              ACTIONS.dispatch(ACTIONS.ROOMTY_SELECT);
+          }
         });
     },
     getData: function (_type) {
@@ -223,9 +227,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.guestModalView = axboot.viewExtend({
     open: function (data) {
         console.log(data);
-
         var _this = this;
-        console.log(this);
         if (!data) data = {};
 
         this.modal.open({
@@ -251,3 +253,30 @@ fnObj.guestModalView = axboot.viewExtend({
     },
 });
 
+/**
+ * roomTy modal
+ */   
+fnObj.roomTyModal = axboot.viewExtend({
+  open: function () {
+      this.modal.open({
+          width: 760,
+          height: 600,
+          header: false,
+          iframe: {
+              param: '',
+              url: 'roomTyModal.jsp',
+          },
+      });
+  },
+  close: function () {
+      this.modal.close();
+  },
+  callback: function (data) {
+      console.log(data);
+      $('.js-roomTycd').val(data.roomNum);
+      this.modal.close();
+  },
+  initView: function () {
+      this.modal = new ax5.ui.modal();
+  }
+});

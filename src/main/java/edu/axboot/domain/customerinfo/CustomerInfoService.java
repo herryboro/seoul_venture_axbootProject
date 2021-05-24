@@ -44,6 +44,7 @@ public class CustomerInfoService extends BaseService<CustomerInfo, Long> {
         return 0;
     }
 
+    @Transactional
     public void saveMemo(List<CustomerInfoDto> reservRegisterDto, String rsvNm) {
         int maxSno = getMaxSno();
 
@@ -71,18 +72,37 @@ public class CustomerInfoService extends BaseService<CustomerInfo, Long> {
     public void updatMemo(List<CustomerInfoDto> memoList, String rsvNum) {
         for (int i = 0; i < memoList.size(); i++) {
             // 수정
-            if (memoList.get(i).getDelYn().equals("N")) {
-                update(qCustomerInfo)
-                        .set(qCustomerInfo.memoCn, memoList.get(i).getMemoCn())
-                        .set(qCustomerInfo.memoDtti, memoList.get(i).getMemoDtti())
-                        .where(qCustomerInfo.rsvNum.eq(rsvNum))
-                        .execute();
-            } else if(memoList.get(i).getDelYn().equals("Y")) {
-                delete(qCustomerInfo).where(qCustomerInfo.id.eq(memoList.get(i).getId())).execute();
-            } else if(memoList.get(i).getDelYn() == null){
-                saveMemo(memoList, rsvNum);
-            }
+            if(memoList.get(i).getDelYn() != null) {
+                if (memoList.get(i).getDelYn().equals("N")) {
+                    update(qCustomerInfo)
+                            .set(qCustomerInfo.memoCn, memoList.get(i).getMemoCn())
+                            .set(qCustomerInfo.memoDtti, memoList.get(i).getMemoDtti())
+                            .where(qCustomerInfo.sno.eq(memoList.get(i).getSno()))
+                            .execute();
+                } else if(memoList.get(i).getDelYn().equals("Y")) {
+                    delete(qCustomerInfo).where(qCustomerInfo.id.eq(memoList.get(i).getId())).execute();
+                }
+            } else {
+                for(CustomerInfoDto memo : memoList) {
+                    if(memo.getId() == null) {
+                        CustomerInfo customerInfo = memo.toEntityOfCustomerInfo();
+                        String memoMan = "메모자";
+                        customerInfo.setMemoMan(memoMan);
+                        customerInfo.setRsvNum(rsvNum);
 
+                        int maxSno = getMaxSno();
+
+                        if(maxSno == 0) {
+                            customerInfo.setSno(100);
+                            customerInfoRepository.save(customerInfo);
+                        } else {
+                            int plusSno = ++maxSno;
+                            customerInfo.setSno(plusSno);
+                            customerInfoRepository.save(customerInfo);
+                        }
+                    }
+                }
+            }
         }
     }
 

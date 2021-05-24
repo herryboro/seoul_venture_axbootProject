@@ -42,6 +42,13 @@ public class ReservRegisterController extends BaseController {
         return Responses.PageResponse.of(reserveList);
     }
 
+    @RequestMapping(value = "/frontList", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public Responses.PageResponse frontList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
+        Page<ReserveStatusDto> reserveList = reservRegisterService.getFrontList(requestParams, pageable);
+
+        return Responses.PageResponse.of(reserveList);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public ResponseFindGuestByIdDto findGuestById(@PathVariable Long id) {
         return reservRegisterService.findGuestById(id);

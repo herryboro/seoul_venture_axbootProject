@@ -7,7 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: 'GET',
-            url: '/api/v1/hotelCustomer',
+            url: '/api/v1/herryboroHotel',
             data: paramObj,
             callback: function (res) {
                 caller.gridView01.clear();
@@ -29,6 +29,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             if (list.length > 0) data = list[0];
         }
         if (data) {
+            console.log(data.roomNum);
             var modal = fnObj.getModal();
             if (modal) modal.callback(data);
             if (opener) window.close();
@@ -51,14 +52,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 
 fnObj.getModal = function () {
-    var modalView;
-    if (parent && modalParams.modalView && (modalView = parent[axboot.def.pageFunctionName][modalParams.modalView])) {
-        return modalView;
-    } else if (opener && modalParams.modalView && (modalView = opener[axboot.def.pageFunctionName][modalParams.modalView])) {
-        return modalView;
-    } else if (parent && parent.axboot && parent.axboot.modal) {
-        return parent.axboot.modal;
-    }
+  var modalView;
+  if (parent && modalParams.modalView && (modalView = parent[axboot.def.pageFunctionName][modalParams.modalView])) {
+      return modalView;
+  } else if (opener && modalParams.modalView && (modalView = opener[axboot.def.pageFunctionName][modalParams.modalView])) {
+      return modalView;
+  } else if (parent && parent.axboot && parent.axboot.modal) {
+      return parent.axboot.modal;
+  }
 };
 
 // fnObj 기본 함수 스타트와 리사이즈
@@ -68,12 +69,10 @@ fnObj.pageStart = function () {
     this.gridView01.initView();
     this.formView01.initView();
 
-    // this.searchView.guestNm.val(modalParams.guestNm);
-    // this.searchView.guestTel.val(modalParams.guestTel);
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
-fnObj.pageResize = function () {};
+
 
 fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
@@ -105,18 +104,11 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             }
         });
-
-        this.guestNm = $('.js-guestNm');
-        this.guestTel = $('.js-guestTel');
-        this.email = $('.js-email');
     },
     getData: function () {
         return {
             pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 5,
-            guestNm: this.guestNm.val(),
-            guestTel: this.guestTel.val(),
-            email: this.email.val()
+            pageSize: this.pageSize || 5
         };
     },
 });
@@ -134,10 +126,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                { key: 'guestNm', label: '이름', width: 100, align: 'center' },
-                { key: 'guestTel', label: '연락처', width: 100, align: 'center' },
-                { key: 'email', label: '이메일', width: '*', align: 'center' },
-                { key: 'brth', label: '생일', width: 150, align: 'center' },
+                { key: 'roomNum', label: '객실번호', width: 100, align: 'center' },
+                { key: 'roomTypCd', label: '객실타입', width: 100, align: 'center' },
+                { key: 'roomSttusCd', label: '객실상태', width: 100, align: 'center' },
+                { key: 'clnSttusCd', label: '청소상태', width: 150, align: 'center' },
+                { key: 'svcSttusCd', label: '서비스상태', width: 150, align: 'center' }
             ],
             body: {
                 onClick: function () {
