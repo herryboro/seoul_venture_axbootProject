@@ -1,4 +1,5 @@
 var modalParams = modalParams || {};
+console.log(modalParams);
 
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {

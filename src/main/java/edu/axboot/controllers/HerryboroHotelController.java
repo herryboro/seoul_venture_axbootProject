@@ -36,7 +36,7 @@ public class HerryboroHotelController extends BaseController {
         return Responses.PageResponse.of(list);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = APPLICATION_JSON)
+    @RequestMapping(method = RequestMethod.POST, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody List<HerryboroHotel> request) {
         herryboroHotelService.save(request);
         return ok();

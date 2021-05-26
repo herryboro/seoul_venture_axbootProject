@@ -2,7 +2,7 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         if(caller.formView01.validate()) {
-            var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
+            var sendObj = $.extend({}, caller.formView01.getData(), {"customerInfos" : caller.gridView01.getData()});
             console.log(sendObj);
 
             axboot.ajax({
@@ -179,7 +179,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return { useYn: 'Y' };
+        return {};
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); 

@@ -33,7 +33,7 @@
                                         <div style="display: inline;" class="res_nm"></div>
                                     </div>
                                     <div data-ax-td style="margin-left: 10px; margin-right: 10px;">
-                                        <input type="text" readonly style="width: 88px;">
+                                        <input type="text" class="form-control js-roomNum" name="roomNum" data-ax-path="roomNum" style="width: 88px;"/>
                                     </div>
                                     <button type="button" class="js-roomTycd" data-grid-view-01-btn="roomTySelect" style="margin-right: 3px;"><i class="cqc-magnifier"></i>객실배정</button>
                                     <button type="button" class="js-save" data-page-btn="save" style="margin-right: 3px;"><i class="cqc-save"></i> 체크인</button>

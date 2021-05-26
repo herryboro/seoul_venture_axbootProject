@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
-import edu.axboot.controllers.dto.HotelCustomerDto;
-import edu.axboot.controllers.dto.ReservRegisterDto;
-import edu.axboot.controllers.dto.ReserveStatusDto;
-import edu.axboot.controllers.dto.ResponseFindGuestByIdDto;
+import edu.axboot.controllers.dto.*;
+import edu.axboot.domain.customerinfo.CustomerInfo;
 import edu.axboot.domain.education.EducationTeachService;
 import edu.axboot.domain.hotelcustomer.HotelCustomer;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
@@ -130,6 +128,7 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
                 .set(qReservRegister.guestTel, reservRegisterDto.getGuestTel())
                 .set(qReservRegister.email, reservRegisterDto.getEmail())
                 .set(qReservRegister.langCd, reservRegisterDto.getLangCd())
+                .set(qReservRegister.roomNum, reservRegisterDto.getRoomNum())
                 .set(qReservRegister.arrDt, reservRegisterDto.getArrDt())
                 .set(qReservRegister.depDt, reservRegisterDto.getDepDt())
                 .set(qReservRegister.nightCnt, reservRegisterDto.getNightCnt())
@@ -194,27 +193,30 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return new PageImpl(reserveList.subList(start, end), pageable, totalSize);
     }
 
-    public Page<ReserveStatusDto> getFrontList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
+    public Page<CheckInRequestDto> getFrontList(RequestParams<CheckInRequestDto> requestParams, Pageable pageable) {
         String guestNm = requestParams.getString("guestNm", "");
-        String rsvNum = requestParams.getString("rsvNum", "");
-        String rsvDt = requestParams.getString("rsvDt", "");
+        String rsvNm = requestParams.getString("rsvNm", "");
+        String depDt = requestParams.getString("depDt", "");
 
         BooleanBuilder builder = new BooleanBuilder();
 
         if (isNotEmpty(guestNm)) {
             builder.and(qReservRegister.guestNm.like("%" + guestNm + "%"));
         }
-        if (isNotEmpty(rsvNum)) {
-            builder.and(qReservRegister.rsvNum.like(rsvNum));
+        if (isNotEmpty(rsvNm)) {
+            builder.and(qReservRegister.rsvNum.like(rsvNm));
         }
-        if (isNotEmpty(rsvDt)) {
-            builder.and(qReservRegister.rsvDt.eq(rsvDt));
+        if (isNotEmpty(depDt)) {
+            builder.and(qReservRegister.depDt.eq(depDt));
         }
-        builder.or(qReservRegister.sttusCd.eq("예약"));
+
+//        builder.and(qReservRegister.sttusCd.eq("예약").or(builder.and(qReservRegister.sttusCd.eq("예약대기")).or(builder.and(qReservRegister.sttusCd.eq("예약확정")))));
+//        builder.and((qReservRegister.sttusCd.eq("예약")).or(builder.and(qReservRegister.sttusCd.eq("예약대기"))).or(builder.and(qReservRegister.sttusCd.eq("예약확정"))));
+        builder.and(qReservRegister.sttusCd.eq("예약"));
         builder.or(qReservRegister.sttusCd.eq("예약대기"));
         builder.or(qReservRegister.sttusCd.eq("예약확정"));
-
         List<ReservRegister> frontList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
+
         int totalSize = frontList.size();
         int start = pageable.getOffset();
         int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());

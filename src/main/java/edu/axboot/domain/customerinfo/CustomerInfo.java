@@ -1,6 +1,7 @@
 package edu.axboot.domain.customerinfo;
 
 import com.chequer.axboot.core.annotations.Comment;
+import edu.axboot.domain.BaseJpaModel;
 import edu.axboot.domain.SimpleJpaModel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "PMS_CHK_MEMO")
-public class CustomerInfo extends SimpleJpaModel<Long> {
+public class CustomerInfo extends BaseJpaModel<Long> {
 
 	@Id
 	@Column(name = "ID", precision = 19, nullable = false)
@@ -50,12 +51,17 @@ public class CustomerInfo extends SimpleJpaModel<Long> {
     }
 
     @Builder
-	public CustomerInfo(String rsvNum, String memoCn, Timestamp memoDtti, String memoMan, String delYn) {
+	public CustomerInfo(Long id, String rsvNum, Integer sno, String memoCn, Timestamp memoDtti, String memoMan, String delYn, boolean isCreated, boolean isModified, boolean isDeleted) {
+    	this.id = id;
 		this.rsvNum = rsvNum;
+		this.sno = sno;
 		this.memoCn = memoCn;
 		this.memoDtti = memoDtti;
 		this.memoMan = memoMan;
 		this.delYn = delYn;
+		this.__created__ = isCreated;
+		this.__modified__ = isModified;
+		this.__deleted__ = isDeleted;
 	}
 
 

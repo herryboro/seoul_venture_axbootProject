@@ -22,6 +22,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
+        sendObj.roomNum = $('.js-roomNum').val();
         console.log(sendObj);
 
         axboot.ajax({
@@ -48,7 +49,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         caller.guestModalView.open(data);
     },
     ROOMTY_SELECT: function(caller, act, data) {
-      caller.roomTyModal.open();
+        data = caller.formView01.model.get() || {}; 
+        console.log(data);
+        caller.roomTyModal.open(data);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -90,7 +93,7 @@ fnObj.pageButtonView = axboot.viewExtend({
  */
 fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return { useYn: 'Y' };
+        return {};
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -198,8 +201,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.MODAL_IN_MODAL);
             },
             "roomTySelect": function() {
-              ACTIONS.dispatch(ACTIONS.ROOMTY_SELECT);
-          }
+                ACTIONS.dispatch(ACTIONS.ROOMTY_SELECT);
+            }
         });
     },
     getData: function (_type) {
@@ -226,7 +229,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
  */
 fnObj.guestModalView = axboot.viewExtend({
     open: function (data) {
-        console.log(data);
         var _this = this;
         if (!data) data = {};
 
@@ -257,26 +259,29 @@ fnObj.guestModalView = axboot.viewExtend({
  * roomTy modal
  */   
 fnObj.roomTyModal = axboot.viewExtend({
-  open: function () {
-      this.modal.open({
-          width: 760,
-          height: 600,
-          header: false,
-          iframe: {
-              param: '',
-              url: 'roomTyModal.jsp',
-          },
-      });
-  },
-  close: function () {
-      this.modal.close();
-  },
-  callback: function (data) {
-      console.log(data);
-      $('.js-roomTycd').val(data.roomNum);
-      this.modal.close();
-  },
-  initView: function () {
-      this.modal = new ax5.ui.modal();
-  }
+    open: function (data) {
+        var _this = this;
+        if (!data) data = {};
+
+        this.modal.open({
+            width: 760,
+            height: 600,
+            header: false,
+            iframe: {
+                param: 'modalView=roomTyModal',
+                url: 'roomTyModal.jsp',
+            },
+        });
+    },
+    close: function () {
+        this.modal.close();
+    },
+    callback: function (data) {
+        console.log(data.roomNum);
+        $('.js-roomNum').val(data.roomNum);
+        this.modal.close();
+    },
+    initView: function () {
+        this.modal = new ax5.ui.modal();
+    }
 });

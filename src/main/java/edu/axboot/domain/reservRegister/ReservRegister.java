@@ -124,8 +124,8 @@ public class ReservRegister extends BaseJpaModel<Long> {
 	public ReservRegister(Long id, String rsvDt, Integer sno, Long guestId, String guestNm, String guestNmEng,
 						  String guestTel, String email, String langCd, String arrDt, String arrTime, String depDt, String depTime,
 						  Integer nightCnt, String roomTypCd, String roomNum, Integer adultCnt, Integer chldCnt, String saleTypCd, String sttusCd,
-						  String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc,
-						  BigDecimal svcPrc) {
+						  String srcCd, String brth, String gender, String payCd, String advnYn, BigDecimal salePrc, List<CustomerInfo> customerInfo,
+						  BigDecimal svcPrc, boolean isCreated, boolean isModified, boolean isDeleted) {
 
 		this.id = id;
 		this.rsvDt = rsvDt;
@@ -142,6 +142,7 @@ public class ReservRegister extends BaseJpaModel<Long> {
 		this.depTime = depTime;
 		this.nightCnt = nightCnt;
 		this.roomTypCd = roomTypCd;
+		this.customerInfo = customerInfo;
 		this.roomNum = roomNum;
 		this.adultCnt = adultCnt;
 		this.chldCnt = chldCnt;
@@ -154,5 +155,8 @@ public class ReservRegister extends BaseJpaModel<Long> {
 		this.advnYn = advnYn;
 		this.salePrc = salePrc;
 		this.svcPrc = svcPrc;
+		this.__created__ = isCreated;
+		this.__modified__ = isModified;
+		this.__deleted__ = isDeleted;
 	}
 }

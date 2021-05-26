@@ -1,4 +1,5 @@
 var modalParams = modalParams || {};
+console.log(modalParams);
 
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
@@ -37,9 +38,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             alert(LANG('ax.script.requireselect'));
         }
     },
-    ITEM_CLICK: function (caller, act, data) {
-        caller.formView01.setData(data || {});
-    },
+    // ITEM_CLICK: function (caller, act, data) {
+    //     caller.formView01.setData(data || {});
+    // },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != 'error') {
@@ -52,14 +53,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 
 fnObj.getModal = function () {
-  var modalView;
-  if (parent && modalParams.modalView && (modalView = parent[axboot.def.pageFunctionName][modalParams.modalView])) {
-      return modalView;
-  } else if (opener && modalParams.modalView && (modalView = opener[axboot.def.pageFunctionName][modalParams.modalView])) {
-      return modalView;
-  } else if (parent && parent.axboot && parent.axboot.modal) {
-      return parent.axboot.modal;
-  }
+    var modalView;
+    if (parent && modalParams.modalView && (modalView = parent[axboot.def.pageFunctionName][modalParams.modalView])) {
+        return modalView;
+    } else if (opener && modalParams.modalView && (modalView = opener[axboot.def.pageFunctionName][modalParams.modalView])) {
+        return modalView;
+    } else if (parent && parent.axboot && parent.axboot.modal) {
+        return parent.axboot.modal;
+    }
 };
 
 // fnObj 기본 함수 스타트와 리사이즈
@@ -135,7 +136,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, { selectedClear: true });
-                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                    // ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
                     ACTIONS.dispatch(ACTIONS.PAGE_CHOICE, this.item);
                 },
                 onDBLClick: function () {

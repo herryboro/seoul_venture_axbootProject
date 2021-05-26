@@ -1,12 +1,10 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        var obj = caller.searchView.getData();
-        
         axboot.ajax({
             type: "GET",
-            url: '/api/v1/reservRegister/frontList',
-            data: obj,
+            url: ["samples", "parent"],
+            data: caller.searchView.getData(),
             callback: function (res) {
                 caller.gridView01.setData(res);
             },
@@ -20,22 +18,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         return false;
     },
-    MODAL_OPEN: function(caller, act, data) {
-        axboot.modal.open({
-            width: 1300,
-            height: 750,
-            iframe: {
-                param: 'id=' + data.id,
-                url: 'checkInModal.jsp',
-            },
-            header: { title: '체크인' },
-            callback: function (data) {
-                console.log(data);
-                if (data && data.dirty) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                }
-                this.close();
-            },
+    PAGE_SAVE: function (caller, act, data) {
+        var saveList = [].concat(caller.gridView01.getData("modified"));
+        saveList = saveList.concat(caller.gridView01.getData("deleted"));
+
+        axboot.ajax({
+            type: "PUT",
+            url: ["samples", "parent"],
+            data: JSON.stringify(saveList),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                axToast.push("저장 되었습니다");
+            }
         });
     },
     ITEM_CLICK: function (caller, act, data) {
@@ -96,24 +90,13 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["searchView0"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
-        this.guestNm = $(".js-guestNm");
-        this.rsvNm = $(".js-rsvNm");
-        this.depDt = $('.js-depDt');
-
-        this.target.find('[data-ax5picker="date"]').ax5picker({
-            direction: "auto",
-            content: {
-                type: 'date'
-            }
-        });
+        this.filter = $("#filter");
     },
     getData: function () {
         return {
-            pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 5,
-            guestNm: this.guestNm.val(),
-            rsvNm: this.rsvNm.val(),
-            depDt: this.depDt.val()
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize,
+            filter: this.filter.val()
         }
     }
 });
@@ -127,28 +110,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
 
         this.target = axboot.gridBuilder({
-            showRowSelector: false,
+            showRowSelector: true,
             frozenColumnIndex: 0,
-            multipleSelect: false,
+            multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "rsvNum", label: "예약번호", width: 120, align: "center"},
-                {key: "rsvDt", label: "예약일", width: 120, align: "center"},
-                {key: "guestNm", label: "투숙객", width: 100, align: "center"},
-                {key: "roomTypCd", label: "객실타입", width: 100, align: "center"},
-                {key: "roomNum", label: "객실번호", width: 100, align: "center"},
-                {key: "depDt", label: "도착일", width: 150, align: "center"},
-                {key: "arrDt", label: "출발일", width: 150, align: "center"},
-                {key: "srcCd", label: "예약경로", width: 100, align: "center"},
-                {key: "saleTypCd", label: "판매유형", width: 100, align: "center"},
-                {key: "sttusCd", label: "상태", width: 100, align: "center"}
+                {key: "key", label: "KEY", width: 160, align: "left", editor: "text"},
+                {key: "value", label: "VALUE", width: 350, align: "left", editor: "text"},
+                {key: "etc1", label: "ETC1", width: 100, align: "center", editor: "text"},
+                {key: "etc2", label: "ETC2", width: 100, align: "center", editor: "text"},
+                {key: "etc3", label: "ETC3", width: 100, align: "center", editor: "text"},
+                {key: "etc4", label: "ETC4", width: 100, align: "center", editor: "text"}
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, {selectedClear: true});
-                },onDBLClick: function () {
-                    ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
-                },
+                }
             }
         });
 
@@ -167,7 +144,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         if (_type == "modified" || _type == "deleted") {
             list = ax5.util.filter(_list, function () {
-                return this.id;
+                delete this.deleted;
+                return this.key;
             });
         } else {
             list = _list;

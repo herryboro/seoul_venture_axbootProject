@@ -23,12 +23,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         var saveList = [].concat(caller.gridView01.getData());
+        console.log(saveList);
         saveList = saveList.concat(caller.gridView01.getData('deleted'));
-
         console.log(saveList);
 
         axboot.ajax({
-            type: "PUT",
+            type: "POST",
             url: "/api/v1/herryboroHotel",
             data: JSON.stringify(saveList),
             callback: function (res) {

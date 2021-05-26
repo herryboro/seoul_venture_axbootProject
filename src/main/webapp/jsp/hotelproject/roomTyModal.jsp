@@ -1,6 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ax" tagdir="/WEB-INF/tags" %>
+<%@ page import="com.chequer.axboot.core.utils.RequestUtils" %>
+<%
+    RequestUtils requestUtils = RequestUtils.of(request);
+    request.setAttribute("modalView", requestUtils.getString("modalView"));
+%>
 
 <ax:set key="title" value="${pageName}"/>
 <ax:set key="page_desc" value="${pageRemark}"/>
@@ -9,6 +14,9 @@
 <ax:layout name="modal">
     <jsp:attribute name="script">
         <ax:script-lang key="ax.script" />
+        <script>
+            var modalParams = {modalView: "${modalView}"};
+        </script>
         <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/roomTyModal.js'/>"></script>
     </jsp:attribute>
     <jsp:attribute name="header">

@@ -22,6 +22,7 @@ import edu.axboot.domain.reservRegister.ReservRegisterService;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,8 +44,8 @@ public class ReservRegisterController extends BaseController {
     }
 
     @RequestMapping(value = "/frontList", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    public Responses.PageResponse frontList(RequestParams<ReserveStatusDto> requestParams, Pageable pageable) {
-        Page<ReserveStatusDto> reserveList = reservRegisterService.getFrontList(requestParams, pageable);
+    public Responses.PageResponse frontList(RequestParams<CheckInRequestDto> requestParams, Pageable pageable) {
+        Page<CheckInRequestDto> reserveList = reservRegisterService.getFrontList(requestParams, pageable);
 
         return Responses.PageResponse.of(reserveList);
     }
@@ -57,7 +58,7 @@ public class ReservRegisterController extends BaseController {
     @RequestMapping(method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody ReservRegisterDto reservRegisterDto) {
         ReservRegister reservRegister = reservRegisterService.saveReserveRegisgter(reservRegisterDto);
-        customerInfoService.saveMemo(reservRegisterDto.getMemoList(), reservRegister.getRsvNum());
+        customerInfoService.saveMemo(reservRegisterDto.getCustomerInfos(), reservRegister.getRsvNum());
 
         return ok(reservRegister.getRsvNum());
     }
@@ -65,7 +66,9 @@ public class ReservRegisterController extends BaseController {
     @RequestMapping(value = "/updateModalInfo", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     public ApiResponse updateInModal(@RequestBody ReservRegisterDto reservRegisterDto) {
         List<ReservRegister> reservRegister = reservRegisterService.updateInModal(reservRegisterDto);
-        customerInfoService.updatMemo(reservRegisterDto.getMemoList(), reservRegister.get(0).getRsvNum());
+        List<CustomerInfoDto> memoList = reservRegisterDto.getCustomerInfos();
+
+        customerInfoService.saveMemoInReserveStaus(memoList, reservRegisterDto.getRsvNum());
 
         return ok(reservRegister.get(0).getRsvNum());
     }

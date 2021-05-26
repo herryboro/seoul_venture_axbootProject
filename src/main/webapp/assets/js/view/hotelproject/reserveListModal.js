@@ -21,13 +21,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
-        var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
-        console.log(sendObj);
+        var obj = caller.formView01.getData();
+
+        var saveList = [].concat(caller.gridView01.getData());
+        saveList = saveList.concat(caller.gridView01.getData('deleted'));
+        obj.customerInfos = saveList;
+
+        console.log(obj);
 
         axboot.ajax({
             type: "POST",
             url: '/api/v1/reservRegister/updateModalInfo',
-            data: JSON.stringify(sendObj),
+            data: JSON.stringify(obj),
             callback: function (res) {
                 console.log(res);
                 axToast.push("저장 되었습니다");
@@ -41,7 +46,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEM_DEL: function (caller, act, data) {
         caller.gridView01.delRow("selected");
         // caller.formView01.getData().customerInfos[0].delYn = 'Y';
-        console.log(caller.formView01.getData());
+        console.log(caller.gridView01.getData());
     },
     MODAL_IN_MODAL: function(caller, act, data) {
         data = caller.formView01.model.get() || {}; 
@@ -187,6 +192,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         });
 
         axboot.buttonClick(this, "data-grid-view-01-btn", {
+            
             "add": function () {
                 ACTIONS.dispatch(ACTIONS.ITEM_ADD);
             },
@@ -204,8 +210,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         if (_type == "modified" || _type == "deleted") {
             list = ax5.util.filter(_list, function () {
-                delete this.deleted;
-                return this.key;
+                return this.id;
             });
         } else {
             list = _list;
