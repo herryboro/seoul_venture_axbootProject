@@ -22,9 +22,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
-        sendObj.roomNum = $('.js-roomNum').val();
+        //sendObj.roomNum = $('.js-roomNum').val();
         console.log(sendObj);
-
+        
         axboot.ajax({
             type: "POST",
             url: '/api/v1/reservRegister/updateModalInfo',
@@ -278,7 +278,7 @@ fnObj.roomTyModal = axboot.viewExtend({
     },
     callback: function (data) {
         console.log(data.roomNum);
-        $('.js-roomNum').val(data.roomNum);
+        fnObj.formView01.model.set('roomNum', data.roomNum);
         this.modal.close();
     },
     initView: function () {

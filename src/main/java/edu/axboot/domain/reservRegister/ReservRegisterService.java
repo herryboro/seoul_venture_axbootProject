@@ -1,17 +1,11 @@
 package edu.axboot.domain.reservRegister;
 
 import com.chequer.axboot.core.parameter.RequestParams;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.jpa.impl.JPAQuery;
 import edu.axboot.controllers.dto.*;
-import edu.axboot.domain.customerinfo.CustomerInfo;
 import edu.axboot.domain.education.EducationTeachService;
-import edu.axboot.domain.hotelcustomer.HotelCustomer;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.xpath.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -141,6 +135,8 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
                 .set(qReservRegister.brth, reservRegisterDto.getBrth())
                 .set(qReservRegister.gender, reservRegisterDto.getGender())
                 .set(qReservRegister.payCd, reservRegisterDto.getPayCd())
+                .set(qReservRegister.salePrc, reservRegisterDto.getSalePrc())
+                .set(qReservRegister.svcPrc, reservRegisterDto.getSvcPrc())
                 .set(qReservRegister.advnYn, reservRegisterDto.getAdvnYn())
                 .where(qReservRegister.id.eq(reservRegisterDto.getId()))
                 .execute();
@@ -210,11 +206,14 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
             builder.and(qReservRegister.depDt.eq(depDt));
         }
 
-//        builder.and(qReservRegister.sttusCd.eq("예약").or(builder.and(qReservRegister.sttusCd.eq("예약대기")).or(builder.and(qReservRegister.sttusCd.eq("예약확정")))));
-//        builder.and((qReservRegister.sttusCd.eq("예약")).or(builder.and(qReservRegister.sttusCd.eq("예약대기"))).or(builder.and(qReservRegister.sttusCd.eq("예약확정"))));
-        builder.and(qReservRegister.sttusCd.eq("예약"));
-        builder.or(qReservRegister.sttusCd.eq("예약대기"));
-        builder.or(qReservRegister.sttusCd.eq("예약확정"));
+        BooleanBuilder builder2 = new BooleanBuilder();
+
+        builder2.or(qReservRegister.sttusCd.eq("예약"));
+        builder2.or(qReservRegister.sttusCd.eq("예약대기"));
+        builder2.or(qReservRegister.sttusCd.eq("예약확정"));
+
+        builder.and(builder2);
+
         List<ReservRegister> frontList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
 
         int totalSize = frontList.size();
@@ -223,11 +222,123 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return new PageImpl(frontList.subList(start, end), pageable, totalSize);
     }
 
+    public Page<HouseRequestDto> getCustomerListForInHouse(String filter, String rsvNum, String roomTypCd, String rsvSttDate, String rsvEndDate,
+                                                           String arrSttDate, String arrEndDate, String depSttDate, String depEndDate, Pageable pageable) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (isNotEmpty(filter)) {
+            BooleanBuilder builder2 = new BooleanBuilder();
+            builder2.or(qReservRegister.guestNm.contains(filter));
+            builder2.or(qReservRegister.guestTel.contains(filter));
+            builder2.or(qReservRegister.email.contains(filter));
+            builder.and(builder2);
+        }
+
+        if (isNotEmpty(rsvNum)) {
+            builder.and(qReservRegister.rsvNum.contains(rsvNum));
+        }
+
+        if (isNotEmpty(roomTypCd)) {
+            builder.and(qReservRegister.roomTypCd.eq((roomTypCd)));
+        }
+
+        if (isNotEmpty(rsvSttDate)) {
+            if (isNotEmpty(rsvEndDate)) {
+                builder.and(qReservRegister.rsvDt.between(rsvSttDate, rsvEndDate));
+            } else {
+                builder.and(qReservRegister.rsvDt.goe(rsvSttDate));
+            }
+        }
+
+        if (isNotEmpty(arrSttDate)) {
+            if (isNotEmpty(arrEndDate)) {
+                builder.and(qReservRegister.arrDt.between(arrSttDate, arrEndDate));
+            } else {
+                builder.and(qReservRegister.arrDt.goe(arrSttDate));
+            }
+        }
+
+        if (isNotEmpty(depSttDate)) {
+            if (isNotEmpty(depEndDate)) {
+                builder.and(qReservRegister.depDt.between(depSttDate, depEndDate));
+            } else {
+                builder.and(qReservRegister.depDt.goe(depSttDate));
+            }
+        }
+
+        BooleanBuilder builder2 = new BooleanBuilder();
+        builder2.or(qReservRegister.sttusCd.eq("체크인"));
+        builder.and(builder2);
+
+        List<ReservRegister> customerList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
+
+        int totalSize = customerList.size();
+        int start = pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());
+        return new PageImpl(customerList.subList(start, end), pageable, totalSize);
+    }
+
+    public Page<HouseRequestDto> getCustomerListForCheckOutStatus(String filter, String rsvNum, String roomTypCd, String rsvSttDate, String rsvEndDate,
+                                                                  String arrSttDate, String arrEndDate, String depSttDate, String depEndDate, Pageable pageable) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (isNotEmpty(filter)) {
+            BooleanBuilder builder2 = new BooleanBuilder();
+            builder2.or(qReservRegister.guestNm.contains(filter));
+            builder2.or(qReservRegister.guestTel.contains(filter));
+            builder2.or(qReservRegister.email.contains(filter));
+            builder.and(builder2);
+        }
+
+        if (isNotEmpty(rsvNum)) {
+            builder.and(qReservRegister.rsvNum.contains(rsvNum));
+        }
+
+        if (isNotEmpty(roomTypCd)) {
+            builder.and(qReservRegister.roomTypCd.eq((roomTypCd)));
+        }
+
+        if (isNotEmpty(rsvSttDate)) {
+            if (isNotEmpty(rsvEndDate)) {
+                builder.and(qReservRegister.rsvDt.between(rsvSttDate, rsvEndDate));
+            } else {
+                builder.and(qReservRegister.rsvDt.goe(rsvSttDate));
+            }
+        }
+
+        if (isNotEmpty(arrSttDate)) {
+            if (isNotEmpty(arrEndDate)) {
+                builder.and(qReservRegister.arrDt.between(arrSttDate, arrEndDate));
+            } else {
+                builder.and(qReservRegister.arrDt.goe(arrSttDate));
+            }
+        }
+
+        if (isNotEmpty(depSttDate)) {
+            if (isNotEmpty(depEndDate)) {
+                builder.and(qReservRegister.depDt.between(depSttDate, depEndDate));
+            } else {
+                builder.and(qReservRegister.depDt.goe(depSttDate));
+            }
+        }
+
+        BooleanBuilder builder2 = new BooleanBuilder();
+        builder2.or(qReservRegister.sttusCd.eq("체크아웃"));
+        builder.and(builder2);
+
+        List<ReservRegister> customerList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
+
+        int totalSize = customerList.size();
+        int start = pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > totalSize ? totalSize : (start + pageable.getPageSize());
+        return new PageImpl(customerList.subList(start, end), pageable, totalSize);
+    }
+
     public ResponseFindGuestByIdDto findGuestById(Long id) {
         ReservRegister guestList = reservRegisterRepository.findOne(id);
         ResponseFindGuestByIdDto responseFindGuestByIdDto = new ResponseFindGuestByIdDto(guestList);
         return responseFindGuestByIdDto;
     }
-
-
 }

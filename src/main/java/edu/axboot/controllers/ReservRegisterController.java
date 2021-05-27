@@ -4,11 +4,8 @@ import com.chequer.axboot.core.api.response.Responses;
 import com.chequer.axboot.core.controllers.BaseController;
 import com.chequer.axboot.core.parameter.RequestParams;
 import edu.axboot.controllers.dto.*;
-import edu.axboot.domain.customerinfo.CustomerInfo;
 import edu.axboot.domain.customerinfo.CustomerInfoService;
-import edu.axboot.domain.education.EducationTeach;
 import edu.axboot.domain.education.EducationTeachService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,9 +17,6 @@ import edu.axboot.domain.reservRegister.ReservRegister;
 import edu.axboot.domain.reservRegister.ReservRegisterService;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,6 +44,41 @@ public class ReservRegisterController extends BaseController {
         return Responses.PageResponse.of(reserveList);
     }
 
+    @RequestMapping(value = "/inHouse", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public Responses.PageResponse inHouse(@RequestParam(value = "filter", required = false) String filter,
+                                          @RequestParam(value = "rsvNum", required = false) String rsvNum,
+                                          @RequestParam(value = "roomTypCd", required = false) String roomTypCd,
+                                          @RequestParam(value = "rsvDtStart", required = false) String rsvSttDate,
+                                          @RequestParam(value = "rsvDtEnd", required = false) String rsvEndDate,
+                                          @RequestParam(value = "arrDtStart", required = false) String arrSttDate,
+                                          @RequestParam(value = "arrDtEnd", required = false) String arrEndDate,
+                                          @RequestParam(value = "depDtStart", required = false) String depSttDate,
+                                          @RequestParam(value = "depDtEnd", required = false) String depEndDate, Pageable pageable) {
+
+        Page<HouseRequestDto> customerListForInHouse = reservRegisterService.getCustomerListForInHouse(filter, rsvNum, roomTypCd, rsvSttDate, rsvEndDate, arrSttDate,
+                arrEndDate, depSttDate, depEndDate, pageable);
+
+        return Responses.PageResponse.of(customerListForInHouse);
+    }
+
+    @RequestMapping(value = "/checkOut", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public Responses.PageResponse checkOut(@RequestParam(value = "filter", required = false) String filter,
+                                          @RequestParam(value = "rsvNum", required = false) String rsvNum,
+                                          @RequestParam(value = "roomTypCd", required = false) String roomTypCd,
+                                          @RequestParam(value = "rsvDtStart", required = false) String rsvSttDate,
+                                          @RequestParam(value = "rsvDtEnd", required = false) String rsvEndDate,
+                                          @RequestParam(value = "arrDtStart", required = false) String arrSttDate,
+                                          @RequestParam(value = "arrDtEnd", required = false) String arrEndDate,
+                                          @RequestParam(value = "depDtStart", required = false) String depSttDate,
+                                          @RequestParam(value = "depDtEnd", required = false) String depEndDate, Pageable pageable) {
+
+        Page<HouseRequestDto> customerListForInHouse = reservRegisterService.getCustomerListForCheckOutStatus(filter, rsvNum, roomTypCd, rsvSttDate, rsvEndDate, arrSttDate,
+                arrEndDate, depSttDate, depEndDate, pageable);
+
+        return Responses.PageResponse.of(customerListForInHouse);
+    }
+
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public ResponseFindGuestByIdDto findGuestById(@PathVariable Long id) {
         return reservRegisterService.findGuestById(id);
@@ -72,4 +101,5 @@ public class ReservRegisterController extends BaseController {
 
         return ok(reservRegister.get(0).getRsvNum());
     }
+
 }

@@ -4,7 +4,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         console.log(caller.searchView.getData());
         axboot.ajax({
             type: "GET",
-            url: '/api/v1/reservRegister/inHouse',
+            url: '/api/v1/reservRegister/checkOut',
             data: caller.searchView.getData(),
             callback: function (res) {
                 console.log(res);
@@ -21,7 +21,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        var saveList = [].concat(caller.gridView01.getData("modified"));
+        var saveList = [].concat(caller.gridView01.getData());
         saveList = saveList.concat(caller.gridView01.getData("deleted"));
 
         axboot.ajax({
@@ -40,7 +40,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             height: 750,
             iframe: {
                 param: 'id=' + data.id,
-                url: 'customerInfoByInHouse.jsp',
+                url: 'customerInfoByCheckOutList.jsp',
             },
             callback: function (data) {
                 console.log(data);

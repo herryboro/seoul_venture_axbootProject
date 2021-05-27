@@ -22,7 +22,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         var obj = caller.formView01.getData();
-
         var saveList = [].concat(caller.gridView01.getData());
         saveList = saveList.concat(caller.gridView01.getData('deleted'));
         obj.customerInfos = saveList;
@@ -155,6 +154,81 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); 
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        this.model.onChange("nightCnt", function (e) {         
+            var arrDt = $('.js-arrDt').val(); 
+            var nightCnt = $('.js-nightCnt').val();
+    
+            var getFormatDate = function(checkDate, nightCnt) {
+                var date = new Date(checkDate);
+                date.setDate(date.getDate() + nightCnt);
+
+                var year = date.getFullYear();
+                var month = (1 + date.getMonth());
+
+                month = month >= 10 ? month : '0' + month;
+                var day = date.getDate();
+                day = day >= 10 ? day : '0' + day;
+
+                return year + '-' + month + '-' + day;
+            }
+            
+            var nightCnt = $('.js-nightCnt').val();
+            var getArrDt = getFormatDate(arrDt, parseInt(nightCnt));     // 숙박수 숫자 변환 필수.. 에러 1시간 못잡음..
+            $('.js-depDt').val(getArrDt);         
+        });
+
+        this.model.onChange("depDt", function (e) {    
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+
+            if(!arrDt) {
+                console.log(arrDt);   
+                $('.js-nightCnt').val(0);
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3).trigger('onChange');
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
+            }
+        });
+
+        this.model.onChange("arrDt", function (e) {    
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+            
+            if(!depDt) {
+                $('.js-nightCnt').val(0).trigger('onChange');
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+                
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                $('.js-nightCnt').val(date3).trigger('onChange');
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
+            }
+        });   
     },
 });
 

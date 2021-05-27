@@ -2,6 +2,7 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         var obj = caller.searchView.getData();
+        console.log(obj);
         
         axboot.ajax({
             type: "GET",

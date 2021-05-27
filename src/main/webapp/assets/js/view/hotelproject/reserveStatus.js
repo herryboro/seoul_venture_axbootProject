@@ -135,6 +135,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         this.depDt2 = $('.js-depDt2');
         this.arrDt1 = $('.js-arrDt1');
         this.arrDt2 = $('.js-arrDt2');
+        
         this.target.find('[data-ax5picker="date"]').ax5picker({
             direction: "auto",
             content: {

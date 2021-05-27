@@ -8,7 +8,7 @@
 
 <ax:layout name="base">
     <jsp:attribute name="script">
-        <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/inHouse.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/checkOut.js' />"></script>
     </jsp:attribute>
     <jsp:body>
         <div data-page-buttons>
