@@ -3,12 +3,10 @@ var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        console.log(modalParams.id);
         axboot.ajax({
             type: 'GET',
             url: '/api/v1/reservRegister/' + modalParams.id,
             callback: function (res) {
-                console.log(res);
                 caller.formView01.clear();
                 caller.formView01.setData(res);
                 caller.gridView01.setData(res.customerInfos);
@@ -148,17 +146,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-              {
-                  key: "memoDtti", 
-                  label: "작성일", 
-                  width: 400, 
-                  align: "center", 
-                  editor: {
-                      type: "date", config: {}
-                  }
-              },
-              {key: "memoCn", label: "메모", width: 900, align: "center", editor: "text"}
-          ],
+                {
+                    key: "memoDtti", 
+                    label: "작성일", 
+                    width: 400, 
+                    align: "center", 
+                    editor: {
+                        type: "date", config: {}
+                    }
+                },
+                {key: "memoCn", label: "메모", width: 900, align: "center", editor: "text"}
+            ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, { selectedClear: true });
@@ -210,7 +208,6 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         return $.extend({}, data);
     },
     setData: function (data) {
-        console.log(data);
         data = $.extend({}, data);
         if (data.rsvNum) {
             $('.js-rsvNum').text('예약번호: ' + data.rsvNum);
@@ -264,9 +261,10 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     //     return true;
     // },
     calcDepDt: function (night) {
-        console.log('call calcDepDt...');
+        console.log(night);
         if (!night) return;
         var arrDt = $('.js-arrDt').val();
+        console.log(arrDt);
         if (!arrDt) return;
         if (night < 0 || night == 0) {
             axDialog.alert('1 이상의 숙박수를 입력하세요.', function () {
@@ -276,7 +274,6 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
             return;
         }
         var depDt = moment(arrDt).add(night, 'day').format('yyyy-MM-DD');
-        console.log('depDt', depDt);
         this.model.set('depDt', depDt);
     },
     calcNigth: function (Dt) {

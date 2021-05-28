@@ -24,29 +24,29 @@
                                 <ax:td label="조회날짜" width="100%">
                                     <div style="display: flex;">
                                         <div>
-                                            <button type="button" class="btn btn-info" data-page-btn="">오늘</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">어제</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">3일</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">7일</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">1개월</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">3개월</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="">6개월</button>
-                                            <button type="button" class="btn btn-info" data-page-btn="" style="margin-right: 20px;">1년</button>  
+                                            <button type="button" class="btn btn-info js-today" value="" data-page-btn="today">오늘</button>
+                                            <button type="button" class="btn btn-info js-yesterday" value="" data-page-btn="yesterday">어제</button>
+                                            <button type="button" class="btn btn-info js-threeDaysAgo" value="" data-page-btn="">3일</button>
+                                            <button type="button" class="btn btn-info js-aWeekAgo" value="" data-page-btn="">7일</button>
+                                            <button type="button" class="btn btn-info js-aMonthAgo" value="" data-page-btn="">1개월</button>
+                                            <button type="button" class="btn btn-info js-threeMonthAgo" value="" data-page-btn="">3개월</button>
+                                            <button type="button" class="btn btn-info js-sixMonthAgo" value="" data-page-btn="">6개월</button>
+                                            <button type="button" class="btn btn-info js-aYearAgo" value="" data-page-btn="" style="margin-right: 20px;">1년</button>  
                                         </div>
                                         <div>
-                                            <div data-ax5picker="rsvDt">
+                                            <div data-ax5picker="search-period">
                                                 <div class="input-group">
                                                     <input
-                                                        type="text" name="rsvDtStart"
-                                                        class="js-rsvDtStart form-control"
-                                                        data-ax-path="rsvDtStart"
+                                                        type="text" name="start"
+                                                        class="js-start form-control"
+                                                        data-ax-path="start"
                                                         data-ax5formatter="date"
                                                         placeholder="yyyy-mm-dd"/>
                                                     <span class="input-group-addon">~</span>
                                                     <input
-                                                        type="text" name="rsvDtEnd"
-                                                        class="js-rsvDtEnd form-control"
-                                                        data-ax-path="rsvDtEnd"
+                                                        type="text" name="end"
+                                                        class="js-end form-control"
+                                                        data-ax-path="end"
                                                         data-ax5formatter="date"
                                                         placeholder="yyyy-mm-dd"/>
                                                     <span class="input-group-addon"><i class="cqc-calendar"></i></span>

@@ -2,10 +2,12 @@ package edu.axboot.domain.reservRegister;
 
 import com.chequer.axboot.core.parameter.RequestParams;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import edu.axboot.controllers.dto.*;
 import edu.axboot.domain.education.EducationTeachService;
 import edu.axboot.domain.hotelcustomer.HotelCustomerService;
 import org.apache.commons.lang.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -336,9 +338,37 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return new PageImpl(customerList.subList(start, end), pageable, totalSize);
     }
 
+    public Page<SalesSumResponseDto> getReportInformation(String start, String end, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(isNotEmpty(start)) {
+            if (isNotEmpty(end)) {
+                builder.and(qReservRegister.rsvDt.between(start, end));
+            }
+        }
+
+        List<SalesSumResponseDto> salesSumResult = select().select(Projections.fields(SalesSumResponseDto.class,
+                qReservRegister.rsvDt,
+                qReservRegister.rsvDt.count().as("count"),
+                qReservRegister.salePrc.sum().as("salePrc"),
+                qReservRegister.svcPrc.sum().as("svcPrc"))
+        ).from(qReservRegister)
+                .where(builder)
+                .groupBy(qReservRegister.rsvDt)
+                .orderBy(qReservRegister.id.asc())
+                .fetch();
+
+        int totalSize = salesSumResult.size();
+        int startPage = pageable.getOffset();
+        int endPage = (startPage + pageable.getPageSize()) > totalSize ? totalSize : (startPage + pageable.getPageSize());
+        return new PageImpl(salesSumResult.subList(startPage, endPage), pageable, totalSize);
+    }
+
     public ResponseFindGuestByIdDto findGuestById(Long id) {
         ReservRegister guestList = reservRegisterRepository.findOne(id);
         ResponseFindGuestByIdDto responseFindGuestByIdDto = new ResponseFindGuestByIdDto(guestList);
         return responseFindGuestByIdDto;
     }
+
+
 }

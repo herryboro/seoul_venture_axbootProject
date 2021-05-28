@@ -1,9 +1,10 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        console.log(caller.searchView.getData());
         axboot.ajax({
             type: "GET",
-            url: '/api/v1/reservRegister',
+            url: '/api/v1/reservRegister/report',
             data: caller.searchView.getData(),
             callback: function (res) {
                 caller.gridView01.setData(res);
@@ -90,13 +91,86 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     initView: function () {
         this.target = $(document["searchView0"]);
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
-        this.filter = $("#filter");
+        this.target.find('[data-ax5picker]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        this.today = $('.js-today').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().format('yyyy-MM-DD'));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.yesterday = $('.js-yesterday').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("1","d").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        
+        this.threeDaysAgo = $('.js-threeDaysAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("3","d").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.aWeekAgo = $('.js-aWeekAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("7","d").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.aMonthAgo = $('.js-aMonthAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("1","M").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.threeMonthAgo = $('.js-threeMonthAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("3","M").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.sixMonthAgo = $('.js-sixMonthAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("6","M").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        this.aYearAgo = $('.js-aYearAgo').on('click', function() {
+            $('.btn').val('');
+            $('.js-start').val(moment().subtract("1","y").format("YYYY-MM-DD"));
+            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        
+        this.start = $('.js-start');
+        this.end = $('.js-end');
     },
     getData: function () {
         return {
-            pageNumber: this.pageNumber,
-            pageSize: this.pageSize,
-            filter: this.filter.val()
+            pageNumber: this.pageNumber || 0,
+            pageSize: this.pageSize || 10,
+            // today: this.today.val(),
+            // yesterday: this.yesterday.val(),
+            // threeDaysAgo: this.threeDaysAgo.val(),
+            // aWeekAgo: this.aWeekAgo.val(),
+            // aMonthAgo: this.aMonthAgo.val(),
+            // threeMonthAgo: this.threeMonthAgo.val(),
+            // sixMonthAgo: this.sixMonthAgo.val(),
+            // aYearAgo: this.aYearAgo.val(),
+            start: this.start.val(),
+            end: this.end.val()
         }
     }
 });
@@ -108,7 +182,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         var _this = this;
-
+        
         this.target = axboot.gridBuilder({
             showRowSelector: false,
             frozenColumnIndex: 0,

@@ -78,6 +78,14 @@ public class ReservRegisterController extends BaseController {
         return Responses.PageResponse.of(customerListForInHouse);
     }
 
+    @RequestMapping(value = "/report", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    public Responses.PageResponse report(@RequestParam(value = "start", required = false) String start,
+                                         @RequestParam(value = "end", required = false) String end, Pageable pageable) {
+
+        reservRegisterService.getReportInformation(start, end, pageable);
+        return Responses.PageResponse.of();
+    }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public ResponseFindGuestByIdDto findGuestById(@PathVariable Long id) {
