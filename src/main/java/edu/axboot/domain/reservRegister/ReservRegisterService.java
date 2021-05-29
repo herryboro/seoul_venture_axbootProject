@@ -338,7 +338,7 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return new PageImpl(customerList.subList(start, end), pageable, totalSize);
     }
 
-    public Page<SalesSumResponseDto> getReportInformation(String start, String end, Pageable pageable) {
+    public List<SalesSumResponseDto> getReportInformation(String start, String end) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if(isNotEmpty(start)) {
@@ -355,13 +355,10 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         ).from(qReservRegister)
                 .where(builder)
                 .groupBy(qReservRegister.rsvDt)
-                .orderBy(qReservRegister.id.asc())
+                .orderBy(qReservRegister.rsvDt.asc())
                 .fetch();
 
-        int totalSize = salesSumResult.size();
-        int startPage = pageable.getOffset();
-        int endPage = (startPage + pageable.getPageSize()) > totalSize ? totalSize : (startPage + pageable.getPageSize());
-        return new PageImpl(salesSumResult.subList(startPage, endPage), pageable, totalSize);
+        return salesSumResult;
     }
 
     public ResponseFindGuestByIdDto findGuestById(Long id) {

@@ -139,7 +139,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "guestNm", label: "이름", width: 80, align: "center", editor: "text"},
-                {key: "guestTel", label: "연락처", width: 100, align: "center", editor: "text"},
+                {key: "guestTel", label: "연락처", width: 100, align: "center", editor: "text", formatter: "phone"},
                 {key: "email", label: "이메일", width: 150, align: "center", editor: "text"},
                 {key: "gender", label: "성별", width: 50, align: "center", editor: "text"},
                 {key: "brth", label: "생년월일", width: 100, align: "center", editor: "text"},

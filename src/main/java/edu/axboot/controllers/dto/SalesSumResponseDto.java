@@ -9,14 +9,14 @@ import java.math.BigDecimal;
 @Getter
 public class SalesSumResponseDto {
     private String rsvDt;
-    private long count;
+    private long count = 0;
     private BigDecimal salePrc = BigDecimal.ZERO;
     private BigDecimal svcPrc = BigDecimal.ZERO;
 
     public BigDecimal getTotalPrc() {
-        this.salePrc = BigDecimal.ZERO;
-        this.svcPrc = BigDecimal.ZERO;
-        return this.salePrc.add(svcPrc);
+        if(this.salePrc == null) this.salePrc = BigDecimal.ZERO;
+        if(this.svcPrc == null) this.svcPrc = BigDecimal.ZERO;
+        return this.salePrc.add(this.svcPrc);
     }
 
     public void setRsvDt(String rsvDt) {

@@ -7,6 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: '/api/v1/reservRegister/report',
             data: caller.searchView.getData(),
             callback: function (res) {
+                console.log(res);
                 caller.gridView01.setData(res);
             },
             options: {
@@ -18,7 +19,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
 
         return false;
-    },
+    },  
     PAGE_SAVE: function (caller, act, data) {
         var saveList = [].concat(caller.gridView01.getData("modified"));
         saveList = saveList.concat(caller.gridView01.getData("deleted"));
@@ -108,7 +109,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         this.yesterday = $('.js-yesterday').on('click', function() {
             $('.btn').val('');
             $('.js-start').val(moment().subtract("1","d").format("YYYY-MM-DD"));
-            $('.js-end').val(moment().format('yyyy-MM-DD'));
+            $('.js-end').val(moment().subtract("1","d").format("YYYY-MM-DD"));
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
         
@@ -159,16 +160,6 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
     },
     getData: function () {
         return {
-            pageNumber: this.pageNumber || 0,
-            pageSize: this.pageSize || 10,
-            // today: this.today.val(),
-            // yesterday: this.yesterday.val(),
-            // threeDaysAgo: this.threeDaysAgo.val(),
-            // aWeekAgo: this.aWeekAgo.val(),
-            // aMonthAgo: this.aMonthAgo.val(),
-            // threeMonthAgo: this.threeMonthAgo.val(),
-            // sixMonthAgo: this.sixMonthAgo.val(),
-            // aYearAgo: this.aYearAgo.val(),
             start: this.start.val(),
             end: this.end.val()
         }
@@ -185,21 +176,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         
         this.target = axboot.gridBuilder({
             showRowSelector: false,
-            frozenColumnIndex: 0,
             multipleSelect: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "key", label: "날짜", width: 150, align: "center", editor: "text"},
-                {key: "value", label: "투숙건수", width: 150, align: "center", editor: "text"},
-                {key: "etc1", label: "판매금액", width: 160, align: "center", editor: "text"},
-                {key: "etc2", label: "서비스 금액", width: 160, align: "center", editor: "text"},
-                {key: "etc3", label: "합계", width: 160, align: "center", editor: "text"}
+                {key: "rsvDt", label: "날짜", width: 150, align: "center", editor: "text"},
+                {key: "count", label: "투숙건수", width: 150, align: "center", editor: "text"},
+                {key: "salePrc", label: "판매금액", width: 160, align: "center", editor: "text", formatter:"money"},
+                {key: "svcPrc", label: "서비스 금액", width: 160, align: "center", editor: "text", formatter:"money"},
+                {key: "totalPrc", label: "합계", width: 160, align: "center", editor: "text", formatter:"money"},
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex, {selectedClear: true});
                 }
-            }
+            },
+            footSum: [
+                [
+                    {label: "총합", align: "center"},
+                    {key: "count", collector: "sum", formatter: "money", align: "right"},
+                    {key: "salePrc", collector: "sum", formatter: "money", align: "right"},
+                    {key: "svcPrc", collector: "sum", formatter: "money", align: "right"},
+                    {key: "totalPrc", collector: "sum", formatter: "money", align: "right"}
+                ]
+            ]
         });
 
         axboot.buttonClick(this, "data-grid-view-01-btn", {

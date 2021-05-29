@@ -28,15 +28,6 @@
         </div>
     </jsp:attribute>
     <jsp:body>
-
-        <div data-page-buttons="">
-            <div class="button-warp">
-                <button type="button" class="btn btn-info" data-page-btn="search"> 조회</button>
-                <button type="button" class="btn btn-info" data-page-btn="choice"> 선택</button>
-                <button type="button" class="btn btn-default" data-page-btn="close"> 닫기</button>
-            </div>
-        </div>
-
         <div role="page-header">
             <form name="searchForm" method="post" class="js-search-form" onsubmit="return false;">
                 <div data-ax-tbl class="ax-search-tbl">

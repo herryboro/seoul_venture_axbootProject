@@ -17,7 +17,7 @@
         <ax:script-lang key="ax.script" var="LANG" />
         <ax:script-lang key="ax.base" var="COL" />
         <script>
-          var modalParams = {id: "${id}"};
+            var modalParams = {id: "${id}"};
         </script>
         <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/customerInfoByInHouse.js' />"></script>
     </jsp:attribute>

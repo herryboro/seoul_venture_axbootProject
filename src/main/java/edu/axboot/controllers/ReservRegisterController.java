@@ -79,11 +79,11 @@ public class ReservRegisterController extends BaseController {
     }
 
     @RequestMapping(value = "/report", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    public Responses.PageResponse report(@RequestParam(value = "start", required = false) String start,
-                                         @RequestParam(value = "end", required = false) String end, Pageable pageable) {
+    public Responses.ListResponse report(@RequestParam(value = "start", required = false) String start,
+                                         @RequestParam(value = "end", required = false) String end) {
 
-        reservRegisterService.getReportInformation(start, end, pageable);
-        return Responses.PageResponse.of();
+        List<SalesSumResponseDto> reportInformation = reservRegisterService.getReportInformation(start, end);
+        return Responses.ListResponse.of(reportInformation);
     }
 
 

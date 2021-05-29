@@ -136,7 +136,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 { key: 'guestNm', label: '이름', width: 100, align: 'center' },
-                { key: 'guestTel', label: '연락처', width: 100, align: 'center' },
+                { key: 'guestTel', label: '연락처', width: 100, align: 'center', formatter: "phone"},
                 { key: 'email', label: '이메일', width: '*', align: 'center' },
                 { key: 'brth', label: '생일', width: 150, align: 'center' },
             ],
@@ -145,10 +145,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     this.self.select(this.dindex, { selectedClear: true });
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
                     ACTIONS.dispatch(ACTIONS.PAGE_CHOICE, this.item);
-                },
-                onDBLClick: function () {
-                    ACTIONS.dispatch(ACTIONS.PAGE_CHOICE, this.item);
-                },
+                }
             },
         });
     },

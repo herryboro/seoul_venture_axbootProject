@@ -17,15 +17,12 @@
         <ax:script-lang key="ax.script" var="LANG" />
         <ax:script-lang key="ax.base" var="COL" />
         <script>
-          var modalParams = {id: "${id}"};
+            var modalParams = {id: "${id}"};
         </script>
         <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/customerInfoByCheckOutList.js' />"></script>
     </jsp:attribute>
     <jsp:body>
         <div class='js-rsvNum'>예약번호 : <input style="border: 0; background: none; width: 100px;" data-ax-path="rsvNum" name="rsvNum" class="js-rsvNum" readonly="readonly"></div>
-        <div>
-          
-        </div>
         <div role="page-header">
             <form name="form" class="js-form" onsubmit="return false;">
                 <div data-ax-tbl class="ax-form-tbl">
@@ -103,7 +100,7 @@
                                     <div data-ax-td style="width:50%">
                                         <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">연락처</div>
                                         <div data-ax-td-wrap>
-                                            <input type="text" data-ax-path="guestTel" class="form-control js-guestTel" data-ax5formatter="phone" />
+                                            <input type="text" data-ax-path="guestTel" class="form-control js-guestTel" data-ax5formatter="phone"/>
                                         </div>
                                     </div> 
                                     <div data-ax-td style="width:50%">
@@ -130,8 +127,8 @@
                                                     <span class="input-group-addon"><i class="cqc-calendar"></i></span>
                                                 </div>
                                                 <div class="form-group">                                            
-                                                  <input type="radio" id="male" name="gender" data-ax-path="gender" value="남"> 남
-                                                  <input type="radio" id="female" name="gender" data-ax-path="gender" value="여"> 여                                              
+                                                    <input type="radio" id="male" name="gender" data-ax-path="gender" value="남"> 남
+                                                    <input type="radio" id="female" name="gender" data-ax-path="gender" value="여"> 여                                              
                                                 </div>
                                             </div>
                                         </div>
@@ -171,7 +168,7 @@
                                     <div data-ax-td style="width:50%">
                                         <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">선수금 여부</div>
                                         <div data-ax-td-wrap>
-                                          <input type="checkbox" name="advnYn" data-ax-path="advnYn" value="Y">
+                                            <input type="checkbox" name="advnYn" data-ax-path="advnYn" value="Y">
                                         </div>
                                     </div>                                                                      
                                 </div>

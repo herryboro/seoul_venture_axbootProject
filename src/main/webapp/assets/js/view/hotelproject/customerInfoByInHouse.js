@@ -80,30 +80,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 
 fnObj.guestModalView = axboot.viewExtend({
-  open: function (data) {
-      var _this = this;
-      if (!data) data = {};
-      this.modal.open({
-          width: 760,
-          height: 600,
-          header: false,
-          iframe: {
-              param: { guestNm: data.guestNm, guestTel: data.guestTel, email: data.email, gender: data.gender, modalView: 'guestModalView' },
-              url: '/jsp/hotelproject/guest-modal.jsp',
-          },
-      });
-  },
-  close: function () {
-      this.modal.close();
-  },
-  callback: function (data) {
-      // console.log('@@@@@@@@@@@' + data);
-      fnObj.formView01.setGuest(data);
-      this.modal.close();
-  },
-  initView: function () {
-      this.modal = new ax5.ui.modal();
-  },
+    open: function (data) {
+        var _this = this;
+        if (!data) data = {};
+        this.modal.open({
+            width: 760,
+            height: 600,
+            header: false,
+            iframe: {
+                param: { guestNm: data.guestNm, guestTel: data.guestTel, email: data.email, gender: data.gender, modalView: 'guestModalView' },
+                url: '/jsp/hotelproject/guest-modal.jsp',
+            },
+        });
+    },
+    close: function () {
+        this.modal.close();
+    },
+    callback: function (data) {
+        // console.log('@@@@@@@@@@@' + data);
+        fnObj.formView01.setGuest(data);
+        this.modal.close();
+    },
+    initView: function () {
+        this.modal = new ax5.ui.modal();
+    },
 });
 
 // fnObj 기본 함수 스타트와 리사이즈
@@ -127,7 +127,7 @@ fnObj.pageButtonView = axboot.viewExtend({
             "checkInCancel": function () {
                 var checkInCancel = $('.js-checkInCancel').val();
                 ACTIONS.dispatch(ACTIONS.CHECK, checkInCancel);
-          }
+            }
         });
     },
 });

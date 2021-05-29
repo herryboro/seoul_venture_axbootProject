@@ -60,7 +60,7 @@
                         <div data-ax-td style="width:50%">
                             <div data-ax-td-label style="width:120px;">연락처</div>
                             <div data-ax-td-wrap>
-                                <input type="text" name="guestTel" data-ax-path="guestTel" title="회사명" class="form-control" data-ax-validate="required" readonly="readonly"/>
+                                <input type="text" name="guestTel" data-ax-path="guestTel" data-ax5formatter="phone" title="회사명" class="form-control" data-ax-validate="required" readonly="readonly"/>
                             </div>
                         </div>
                         <div data-ax-td style="width:50%">

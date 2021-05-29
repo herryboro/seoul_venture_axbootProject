@@ -22,20 +22,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         return false;
     },
-    PAGE_SAVE: function (caller, act, data) {
-        var saveList = [].concat(caller.gridView01.getData());
-        saveList = saveList.concat(caller.gridView01.getData("deleted"));
-
-        axboot.ajax({
-            type: "PUT",
-            url: ["samples", "parent"],
-            data: JSON.stringify(saveList),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                axToast.push("저장 되었습니다");
-            }
-        });
-    },
     MODAL_OPEN: function (caller, act, data) {
         console.log(data.id);
 

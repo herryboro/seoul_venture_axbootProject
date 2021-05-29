@@ -11,9 +11,12 @@
         <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/reservRegister.js' />"></script>
     </jsp:attribute>
     <jsp:body>
-
-        <ax:page-buttons></ax:page-buttons>
-
+        <div data-page-buttons>
+            <div class="button-warp">
+                <button type="button" class="btn btn-info" data-page-btn="save"><i class="fas fa-search"></i> 저장</button>
+                <button type="button" class="btn btn-info" data-page-btn="reload">신규등록</button>
+            </div>
+        </div>
         <ax:split-layout name="ax1" orientation="horizontal">
             <ax:split-panel width="*" style="">
                 <ax:split-panel width="*" style="padding-left: 10px;">
@@ -115,7 +118,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">연락처</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="guestTel" data-ax-path="guestTel" class="js-guestTel form-control" />
+                                                        <input type="text" name="guestTel" data-ax-path="guestTel" data-ax5formatter="phone" class="js-guestTel form-control" />
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">

@@ -71,6 +71,9 @@ fnObj.pageButtonView = axboot.viewExtend({
         axboot.buttonClick(this, "data-page-btn", {
             "save": function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            },
+            "reload": function() {
+                location.reload();
             }
         });
     }

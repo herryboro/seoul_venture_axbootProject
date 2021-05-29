@@ -81,9 +81,6 @@ fnObj.pageButtonView = axboot.viewExtend({
             save: function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
             }
-            // create: function () {
-            //     ACTIONS.dispatch(ACTIONS.MODAL_OPEN, this.item);
-            // },
         });
     },
 });
@@ -266,7 +263,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         });
 
         axboot.buttonClick(this, "data-grid-view-01-btn", {
-            
             "add": function () {
                 ACTIONS.dispatch(ACTIONS.ITEM_ADD);
             },
@@ -274,7 +270,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.ITEM_DEL);
             },
             "create": function() {
-                ACTIONS.dispatch(ACTIONS.MODAL_IN_MODAL);
+                ACTIONS.dispatch(ACTIONS.MODAL_IN_MODAL, this.item);
             }
         });
     },
@@ -321,7 +317,6 @@ fnObj.guestModalView = axboot.viewExtend({
         this.modal.close();
     },
     callback: function (data) {
-        console.log(data);
         fnObj.formView01.setGuest(data);
         this.modal.close();
     },
