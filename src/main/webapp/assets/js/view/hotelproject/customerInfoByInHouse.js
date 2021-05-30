@@ -22,8 +22,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     CHECK: function (caller, act, data) {
-        // if (caller.formView01.validate()) {
-            console.log(data);
             if(data) {
                 caller.formView01.model.set('sttusCd', data);
             }

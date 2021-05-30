@@ -21,14 +21,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
-        var sendObj = $.extend({}, caller.formView01.getData(), {memoList: caller.gridView01.getData()});
-        //sendObj.roomNum = $('.js-roomNum').val();
-        console.log(sendObj);
+        fnObj.formView01.model.set('sttusCd', data);
+        var obj = caller.formView01.getData();
+        var saveList = [].concat(caller.gridView01.getData());
+        saveList = saveList.concat(caller.gridView01.getData('deleted'));
+        obj.customerInfos = saveList;
         
         axboot.ajax({
             type: "POST",
             url: '/api/v1/reservRegister/updateModalInfo',
-            data: JSON.stringify(sendObj),
+            data: JSON.stringify(obj),
             callback: function (res) {
                 console.log(res);
                 axToast.push("저장 되었습니다");
@@ -82,7 +84,7 @@ fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
         axboot.buttonClick(this, 'data-page-btn', {
             save: function() {
-                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE, $('.js-save').val());
             }
         });
     },
@@ -154,6 +156,73 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); 
+
+        var getFormatDate = function(checkDate, nightCnt) {
+            var date = new Date(checkDate);
+            date.setDate(date.getDate() + nightCnt);
+
+            var year = date.getFullYear();
+            var month = (1 + date.getMonth());
+
+            month = month >= 10 ? month : '0' + month;
+            var day = date.getDate();
+            day = day >= 10 ? day : '0' + day;
+
+            return year + '-' + month + '-' + day;
+        }
+
+        $('.js-nightCnt').on('change', function () {
+            var arrDt = $('.js-arrDt').val(); 
+            var nightCnt = $('.js-nightCnt').val();
+    
+            var getArrDt = getFormatDate(arrDt, parseInt(nightCnt));     // 숙박수 숫자 변환 필수.. 에러 1시간 못잡음..
+            fnObj.formView01.model.set('depDt', getArrDt);
+        });
+
+        $('.js-depDt').on('change', function () {
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+
+            if(!arrDt) {
+                console.log(arrDt);   
+                fnObj.formView01.model.set('nightCnt', 0);
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                    fnObj.formView01.model.set('nightCnt', date3);
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
+            }
+        });
+
+        $('.js-arrDt').on('change', function () {
+            var arrDt = $('.js-arrDt').val();
+            var depDt = $('.js-depDt').val();    
+            
+            if(!depDt) {
+                fnObj.formView01.model.set('nightCnt', 0);
+            } else {        
+                var date1 = new Date(depDt);
+                var date2 = new Date(arrDt);
+                
+                if(date1 >= date2) {
+                    var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
+                    fnObj.formView01.model.set("nightCnt", date3);
+                } else {
+                    axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
+                        $('[data-ax-path="arrDt"]').focus();
+                    });
+                    return false;
+                }
+            }
+        });
     },
 });
 

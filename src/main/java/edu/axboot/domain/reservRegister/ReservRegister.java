@@ -159,4 +159,8 @@ public class ReservRegister extends BaseJpaModel<Long> {
 		this.__modified__ = isModified;
 		this.__deleted__ = isDeleted;
 	}
+
+	public void updateStatus(String sttusCd) {
+		this.sttusCd = sttusCd;
+	}
 }

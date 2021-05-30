@@ -23,9 +23,6 @@
     </jsp:attribute>
     <jsp:body>
         <div class='js-rsvNum'>예약번호 : <input style="border: 0; background: none; width: 100px;" data-ax-path="rsvNum" name="rsvNum" class="js-rsvNum" readonly="readonly"></div>
-        <div>
-
-        </div>
         <div role="page-header">
             <form name="form" class="js-form" onsubmit="return false;">
                 <div data-ax-tbl class="ax-form-tbl">

@@ -169,7 +169,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 {key: "srcCd", label: "예약경로", width: 100, align: "center"},
                 {key: "saleTypCd", label: "판매유형", width: 100, align: "center"},
                 {key: "sttusCd", label: "상태", width: 100, align: "center"},
-                {key: "salePrc", label: "결제금액", width: 100, align: "center"},
+                {key: "salePrc", label: "결제금액", width: 100, align: "center", formatter: "money"},
             ],
             body: {
                 onClick: function () {

@@ -37,6 +37,12 @@ public class ReservRegisterController extends BaseController {
         return Responses.PageResponse.of(reserveList);
     }
 
+    @RequestMapping(method = RequestMethod.PUT, produces = APPLICATION_JSON)
+    public ApiResponse updateStatus(@RequestBody List<UpdateStatusDto> updateStatusDtos) {
+        reservRegisterService.updateStatus(updateStatusDtos);
+        return ok();
+    }
+
     @RequestMapping(value = "/frontList", method = RequestMethod.GET, produces = APPLICATION_JSON)
     public Responses.PageResponse frontList(RequestParams<CheckInRequestDto> requestParams, Pageable pageable) {
         Page<CheckInRequestDto> reserveList = reservRegisterService.getFrontList(requestParams, pageable);

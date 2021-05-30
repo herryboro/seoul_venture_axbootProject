@@ -36,7 +36,7 @@
                                         <input type="text" class="form-control js-roomNum" name="roomNum" data-ax-path="roomNum" style="width: 88px;"/>
                                     </div>
                                     <button type="button" class="js-roomTycd" data-grid-view-01-btn="roomTySelect" style="margin-right: 3px;"><i class="cqc-magnifier"></i>객실배정</button>
-                                    <button type="button" class="js-save" data-page-btn="save" style="margin-right: 3px;"><i class="cqc-save"></i> 체크인</button>
+                                    <button type="button" class="js-save" data-page-btn="save" style="margin-right: 3px;" value="체크인"><i class="cqc-save"></i> 체크인</button>
                                 </div>
                             </div>
                             <div data-ax-tbl class="ax-form-tbl">
@@ -129,7 +129,7 @@
                                                 <div data-ax-td style="width:50%">
                                                     <div data-ax-td-label style="width:120px; background-color: #fff; background-image: none;">연락처</div>
                                                     <div data-ax-td-wrap>
-                                                        <input type="text" name="guestTel" data-ax-path="guestTel" class="js-guestTel form-control" />
+                                                        <input type="text" name="guestTel" data-ax-path="guestTel" class="js-guestTel form-control" data-ax5formatter="phone"/>
                                                     </div>
                                                 </div> 
                                                 <div data-ax-td style="width:50%">

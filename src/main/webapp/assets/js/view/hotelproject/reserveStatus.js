@@ -43,25 +43,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     UPDATE_STTUS: function(caller, act, data) {
-        var status = $('.js-sttusCdB').val();
-        var list = [].concat(caller.gridView01.getData('selected'));
-        
-        axboot.ajax({
-            type: "GET",
-            url: '/api/v1/reservRegister',
-            data: obj,
-            callback: function (res) {
-                console.log(res);
-                caller.gridView01.setData(res);
-            },
-            options: {
-                // axboot.ajax 함수에 2번째 인자는 필수가 아닙니다. ajax의 옵션을 전달하고자 할때 사용합니다.
-                onError: function (err) {
-                    console.log(err);
-                }
-            }
-        });
+        axDialog.confirm({ msg: '선택한 항목의 상태를 변경하시겠습니까?' }, function () {
+            var items = caller.gridView01.getData('selected');
+            console.log(items);
 
+            if (!items.length) {
+                axDialog.alert('변경할 데이터가 없습니다.');
+                return false;
+            } else {
+                items.forEach(function (val) {
+                    val.sttusCd = $('.js-sttusCdB').val();
+                });                    
+            }
+            // console.log(items); return false;
+
+            axboot.ajax({
+                type: 'PUT',
+                url: '/api/v1/reservRegister',
+                data: JSON.stringify(items),
+                callback: function (res) {
+                    axDialog.alert('변경 되었습니다');
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                },
+            });
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -94,11 +99,14 @@ fnObj.pageButtonView = axboot.viewExtend({
             "search": function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
-            "save": function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            "clear": function () {
+                location.reload();
             },
             "excel": function () {
 
+            },
+            "saveSttus" : function() {
+                ACTIONS.dispatch(ACTIONS.UPDATE_STTUS);
             }
         });
     }
@@ -186,11 +194,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             }
         });
 
-        axboot.buttonClick(this, "data-grid-view-01-btn", {
-            "saveSttus": function () {
-                ACTIONS.dispatch(ACTIONS.UPDATE_STTUS);
-            }
-        });
+        // axboot.buttonClick(this, "data-grid-view-01-btn", {
+        //     "saveSttus": function () {
+        //         ACTIONS.dispatch(ACTIONS.UPDATE_STTUS);
+        //     }
+        // });
     },
     getData: function (_type) {
         var list = [];
@@ -210,7 +218,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.target.addRow({__created__: true}, "last");
     }
 });
-
 
 /**
  * formView

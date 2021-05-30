@@ -11,10 +11,13 @@
         <script type="text/javascript" src="<c:url value='/assets/js/view/hotelproject/reserveStatus.js' />"></script>
     </jsp:attribute>
     <jsp:body>
-
-        <ax:page-buttons></ax:page-buttons>
-
-
+        <div data-page-buttons>
+            <div class="button-warp">
+                <button type="button" class="btn btn-info" data-page-btn="search"><i class="fas fa-search"></i> 검색</button>
+                <button type="button" class="btn btn-default" data-page-btn="clear">검색선택초기화</button>
+                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="far fa-file-excel"></i> 엑셀다운로드</button>
+            </div>
+        </div>
         <div role="page-header">
             <form name="form" class="js-form">
                 <div class="H5"></div>
@@ -123,7 +126,7 @@
                         <div data-ax-td style="width: 100px;">
                             <ax:common-code groupCd="PMS_STAY_STATUS" dataPath="sttusCd" clazz="js-sttusCdB" emptyText="전체"/>
                         </div>
-                        <button type="button" class="btn btn-default" data-grid-view-01-btn="saveSttus" style="height: 27px; margin-left: 5px;"></i> 상태 변경</button>
+                        <button type="button" class="btn btn-default" data-page-btn="saveSttus" style="height: 27px; margin-left: 5px;"></i> 상태 변경</button>
                     </div>
                 </div>
                 <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>

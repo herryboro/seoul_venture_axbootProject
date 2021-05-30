@@ -197,17 +197,9 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     },
     validate: function () {
         var item = this.model.get();
-
         var rs = this.model.validate();
-        // if (rs.error) {
-        //     axDialog.alert(LANG('ax.script.form.validate', rs.error[0].jquery.attr('title')), function () {
-        //         rs.error[0].jquery.focus();
-        //     });
-        //     return false;
-        // }
-
-        // required 이외 벨리데이션 정의
         var pattern;
+
         if (item.email) {
             pattern = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.(?:[A-Za-z0-9]{2,}?)$/i;
             if (!pattern.test(item.email)) {
@@ -220,7 +212,6 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
 
         return true;
     },
-    
     initView: function () {
         var _this = this; // fnObj.formView01
 
@@ -229,44 +220,42 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
 
-        // 날짜 계산 코드들
-        this.model.onChange("nightCnt", function (e) {         
+        var getFormatDate = function(checkDate, nightCnt) {
+            var date = new Date(checkDate);
+            date.setDate(date.getDate() + nightCnt);
+
+            var year = date.getFullYear();
+            var month = (1 + date.getMonth());
+
+            month = month >= 10 ? month : '0' + month;
+            var day = date.getDate();
+            day = day >= 10 ? day : '0' + day;
+
+            return year + '-' + month + '-' + day;
+        }
+
+        $('.js-nightCnt').on('change', function () {
             var arrDt = $('.js-arrDt').val(); 
             var nightCnt = $('.js-nightCnt').val();
     
-            var getFormatDate = function(checkDate, nightCnt) {
-                var date = new Date(checkDate);
-                date.setDate(date.getDate() + nightCnt);
-
-                var year = date.getFullYear();
-                var month = (1 + date.getMonth());
-
-                month = month >= 10 ? month : '0' + month;
-                var day = date.getDate();
-                day = day >= 10 ? day : '0' + day;
-
-                return year + '-' + month + '-' + day;
-            }
-            
-            var nightCnt = $('.js-nightCnt').val();
             var getArrDt = getFormatDate(arrDt, parseInt(nightCnt));     // 숙박수 숫자 변환 필수.. 에러 1시간 못잡음..
-            $('.js-depDt').val(getArrDt);         
+            fnObj.formView01.model.set('depDt', getArrDt);
         });
 
-        this.model.onChange("depDt", function (e) {    
+        $('.js-depDt').on('change', function () {
             var arrDt = $('.js-arrDt').val();
             var depDt = $('.js-depDt').val();    
 
             if(!arrDt) {
                 console.log(arrDt);   
-                $('.js-nightCnt').val(0);
+                fnObj.formView01.model.set('nightCnt', 0);
             } else {        
                 var date1 = new Date(depDt);
                 var date2 = new Date(arrDt);
 
                 if(date1 >= date2) {
                     var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
-                $('.js-nightCnt').val(date3).trigger('onChange');
+                    fnObj.formView01.model.set('nightCnt', date3);
                 } else {
                     axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
                         $('[data-ax-path="arrDt"]').focus();
@@ -276,19 +265,19 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        this.model.onChange("arrDt", function (e) {    
+        $('.js-arrDt').on('change', function () {
             var arrDt = $('.js-arrDt').val();
             var depDt = $('.js-depDt').val();    
             
             if(!depDt) {
-                $('.js-nightCnt').val(0).trigger('onChange');
+                fnObj.formView01.model.set('nightCnt', 0);
             } else {        
                 var date1 = new Date(depDt);
                 var date2 = new Date(arrDt);
                 
                 if(date1 >= date2) {
                     var date3 = (date1 - date2) / 1000 / 60 / 60 / 24;
-                $('.js-nightCnt').val(date3).trigger('onChange');
+                    fnObj.formView01.model.set("nightCnt", date3);
                 } else {
                     axDialog.alert('출발일이 도착일보다 빠릅니다.', function () {
                         $('[data-ax-path="arrDt"]').focus();
@@ -296,9 +285,6 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                     return false;
                 }
             }
-        });        
-        
-        // 모달 버튼
-
-    },
+        });
+    }
 });

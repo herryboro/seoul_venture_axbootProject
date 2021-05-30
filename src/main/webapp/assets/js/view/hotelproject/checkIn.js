@@ -1,7 +1,7 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        var obj = caller.searchView.getData();
+        var obj = $.extend({}, caller.searchView.getData(), data);
         console.log(obj);
         
         axboot.ajax({
@@ -68,11 +68,6 @@ fnObj.pageStart = function () {
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
-fnObj.pageResize = function () {
-
-};
-
-
 fnObj.pageButtonView = axboot.viewExtend({
     initView: function () {
         axboot.buttonClick(this, "data-page-btn", {
@@ -128,6 +123,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
 
         this.target = axboot.gridBuilder({
+            onPageChange: function (pageNumber) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, { pageNumber: pageNumber });
+            },
             showRowSelector: false,
             frozenColumnIndex: 0,
             multipleSelect: false,

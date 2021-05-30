@@ -328,6 +328,7 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
 
         BooleanBuilder builder2 = new BooleanBuilder();
         builder2.or(qReservRegister.sttusCd.eq("체크아웃"));
+        builder2.or(qReservRegister.sttusCd.eq("체크인취소"));
         builder.and(builder2);
 
         List<ReservRegister> customerList = select().from(qReservRegister).where(builder).orderBy(qReservRegister.id.asc()).fetch();
@@ -367,5 +368,11 @@ public class ReservRegisterService extends BaseService<ReservRegister, Long> {
         return responseFindGuestByIdDto;
     }
 
-
+    @Transactional
+    public void updateStatus(List<UpdateStatusDto> updateStatusDtos) {
+        for (UpdateStatusDto dto: updateStatusDtos) {
+            ReservRegister one = reservRegisterRepository.findOne(dto.getId());
+            one.updateStatus(dto.getSttusCd());
+        }
+    }
 }
